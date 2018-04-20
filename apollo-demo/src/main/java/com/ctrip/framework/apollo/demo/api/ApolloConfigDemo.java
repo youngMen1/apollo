@@ -120,4 +120,5 @@ public class ApolloConfigDemo {
       apolloConfigDemo.getConfig(input);
     }
   }
+
 }
