@@ -52,6 +52,7 @@ public class ItemController {
     configService.updateConfigItemByText(model);
   }
 
+  // 添加
   @PreAuthorize(value = "@permissionValidator.hasModifyNamespacePermission(#appId, #namespaceName)")
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/item", method = RequestMethod.POST)
   public ItemDTO createItem(@PathVariable String appId, @PathVariable String env,
@@ -71,6 +72,7 @@ public class ItemController {
     return configService.createItem(appId, Env.valueOf(env), clusterName, namespaceName, item);
   }
 
+  // 修改
   @PreAuthorize(value = "@permissionValidator.hasModifyNamespacePermission(#appId, #namespaceName)")
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/item", method = RequestMethod.PUT)
   public void updateItem(@PathVariable String appId, @PathVariable String env,
@@ -84,7 +86,7 @@ public class ItemController {
     configService.updateItem(appId, Env.valueOf(env), clusterName, namespaceName, item);
   }
 
-
+  // 删除
   @PreAuthorize(value = "@permissionValidator.hasModifyNamespacePermission(#appId, #namespaceName)")
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items/{itemId}", method = RequestMethod.DELETE)
   public void deleteItem(@PathVariable String appId, @PathVariable String env,
@@ -96,7 +98,7 @@ public class ItemController {
     configService.deleteItem(Env.valueOf(env), itemId, userInfoHolder.getUser().getUserId());
   }
 
-
+  // 查询
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items", method = RequestMethod.GET)
   public List<ItemDTO> findItems(@PathVariable String appId, @PathVariable String env,
                                  @PathVariable String clusterName, @PathVariable String namespaceName,
@@ -117,6 +119,7 @@ public class ItemController {
     return items;
   }
 
+  //
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/items", method = RequestMethod.GET)
   public List<ItemDTO> findBranchItems(@PathVariable("appId") String appId, @PathVariable String env,
                                        @PathVariable("clusterName") String clusterName,
@@ -126,6 +129,7 @@ public class ItemController {
     return findItems(appId, env, branchName, namespaceName, "lastModifiedTime");
   }
 
+  // 对比
   @RequestMapping(value = "/namespaces/{namespaceName}/diff", method = RequestMethod.POST, consumes = {
       "application/json"})
   public List<ItemDiffs> diff(@RequestBody NamespaceSyncModel model) {

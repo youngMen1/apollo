@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @SQLDelete(sql = "Update Permission set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
 public class Permission extends BaseEntity {
+
   @Column(name = "PermissionType", nullable = false)
   private String permissionType;
 
@@ -38,4 +39,5 @@ public class Permission extends BaseEntity {
   public void setTargetId(String targetId) {
     this.targetId = targetId;
   }
+
 }

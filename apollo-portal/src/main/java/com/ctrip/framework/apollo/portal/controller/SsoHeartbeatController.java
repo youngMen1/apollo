@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/sso_heartbeat")
 public class SsoHeartbeatController {
+
   @Autowired
   private SsoHeartbeatHandler handler;
 
@@ -26,4 +27,5 @@ public class SsoHeartbeatController {
   public void heartbeat(HttpServletRequest request, HttpServletResponse response) {
     handler.doHeartbeat(request, response);
   }
+
 }

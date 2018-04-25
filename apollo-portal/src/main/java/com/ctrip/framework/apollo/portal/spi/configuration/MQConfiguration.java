@@ -32,6 +32,7 @@ public class MQConfiguration {
     public DefaultMQService mqService() {
       return new DefaultMQService();
     }
+
   }
 
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author lepdou 2017-08-30
+ *
+ * 登陆 Controller
  */
 @Controller
 public class SignInController {

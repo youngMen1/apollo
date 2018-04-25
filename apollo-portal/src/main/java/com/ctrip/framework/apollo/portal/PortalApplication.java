@@ -26,4 +26,5 @@ public class PortalApplication {
     context.addApplicationListener(new ApplicationPidFileWriter());
     context.addApplicationListener(new EmbeddedServerPortFileWriter());
   }
+
 }

@@ -41,4 +41,5 @@ public class DiscoveryService {
     }
     return application != null ? application.getInstances() : Collections.emptyList();
   }
+
 }

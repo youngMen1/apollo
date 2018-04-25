@@ -55,8 +55,10 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/notifications/v2")
 public class NotificationControllerV2 implements ReleaseMessageListener {
   private static final Logger logger = LoggerFactory.getLogger(NotificationControllerV2.class);
+
   private final Multimap<String, DeferredResultWrapper> deferredResults =
       Multimaps.synchronizedSetMultimap(HashMultimap.create());
+
   private static final Splitter STRING_SPLITTER =
       Splitter.on(ConfigConsts.CLUSTER_NAMESPACE_SEPARATOR).omitEmptyStrings();
   private static final Type notificationsTypeReference =
@@ -182,7 +184,7 @@ public class NotificationControllerV2 implements ReleaseMessageListener {
         continue;
       }
       //strip out .properties suffix
-      String originalNamespace = namespaceUtil.filterNamespaceName(notification.getNamespaceName());
+      String originalNamespace = namespaceUtil.filterNamespaceName(notification.getNamespaceName()); // TODO 芋艿，什么鬼？
       notification.setNamespaceName(originalNamespace);
       //fix the character case issue, such as FX.apollo <-> fx.apollo
       String normalizedNamespace = namespaceUtil.normalizeNamespace(appId, originalNamespace);

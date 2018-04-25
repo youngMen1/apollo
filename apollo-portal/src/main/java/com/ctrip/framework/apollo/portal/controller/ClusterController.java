@@ -29,6 +29,7 @@ public class ClusterController {
   @Autowired
   private UserInfoHolder userInfoHolder;
 
+  // 添加集群
   @PreAuthorize(value = "@permissionValidator.hasCreateClusterPermission(#appId)")
   @RequestMapping(value = "apps/{appId}/envs/{env}/clusters", method = RequestMethod.POST)
   public ClusterDTO createCluster(@PathVariable String appId, @PathVariable String env,
@@ -48,6 +49,7 @@ public class ClusterController {
     return clusterService.createCluster(Env.valueOf(env), cluster);
   }
 
+  // 删除集群
   @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
   @RequestMapping(value = "apps/{appId}/envs/{env}/clusters/{clusterName:.+}", method = RequestMethod.DELETE)
   public ResponseEntity<Void> deleteCluster(@PathVariable String appId, @PathVariable String env,

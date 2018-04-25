@@ -1,67 +1,82 @@
 package com.ctrip.framework.apollo.portal.entity.model;
 
-
 import java.util.Set;
 
+/**
+ * App Model
+ */
 public class AppModel {
 
-  private String name;
+    /**
+     * App 名
+     */
+    private String name;
+    /**
+     * App 编号
+     */
+    private String appId;
+    /**
+     * 部门编号
+     */
+    private String orgId;
+    /**
+     * 部门名
+     */
+    private String orgName;
+    /**
+     * 拥有人名
+     */
+    private String ownerName;
+    /**
+     * 管理员编号集合
+     */
+    private Set<String> admins;
 
-  private String appId;
+    public String getName() {
+        return name;
+    }
 
-  private String orgId;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  private String orgName;
+    public String getAppId() {
+        return appId;
+    }
 
-  private String ownerName;
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  private Set<String> admins;
+    public String getOrgId() {
+        return orgId;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getOrgName() {
+        return orgName;
+    }
 
-  public String getAppId() {
-    return appId;
-  }
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
-  public String getOrgId() {
-    return orgId;
-  }
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
 
-  public void setOrgId(String orgId) {
-    this.orgId = orgId;
-  }
+    public Set<String> getAdmins() {
+        return admins;
+    }
 
-  public String getOrgName() {
-    return orgName;
-  }
-
-  public void setOrgName(String orgName) {
-    this.orgName = orgName;
-  }
-
-  public String getOwnerName() {
-    return ownerName;
-  }
-
-  public void setOwnerName(String ownerName) {
-    this.ownerName = ownerName;
-  }
-
-  public Set<String> getAdmins() {
-    return admins;
-  }
-
-  public void setAdmins(Set<String> admins) {
-    this.admins = admins;
-  }
+    public void setAdmins(Set<String> admins) {
+        this.admins = admins;
+    }
 }

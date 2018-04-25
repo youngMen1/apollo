@@ -6,6 +6,9 @@ import com.ctrip.framework.apollo.common.entity.App;
 
 import org.springframework.context.ApplicationEvent;
 
+/**
+ * App 创建事件
+ */
 public class AppCreationEvent extends ApplicationEvent {
 
   public AppCreationEvent(Object source) {
@@ -16,4 +19,5 @@ public class AppCreationEvent extends ApplicationEvent {
     Preconditions.checkState(source != null);
     return (App) this.source;
   }
+
 }

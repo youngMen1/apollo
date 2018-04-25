@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * 管理员实体
+ *
  * @author lepdou 2017-04-08
  */
 @Entity
@@ -75,4 +77,5 @@ public class UserPO {
     userInfo.setEmail(this.getEmail());
     return userInfo;
   }
+
 }

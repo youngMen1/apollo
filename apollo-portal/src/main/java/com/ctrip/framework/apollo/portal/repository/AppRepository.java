@@ -8,7 +8,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * App Repository
+ */
 public interface AppRepository extends PagingAndSortingRepository<App, Long> {
 
   App findByAppId(String appId);

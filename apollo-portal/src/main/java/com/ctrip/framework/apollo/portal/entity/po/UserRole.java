@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
+ * 管理员拥有角色实体
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 @Entity
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 @SQLDelete(sql = "Update UserRole set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
 public class UserRole extends BaseEntity {
+
   @Column(name = "UserId", nullable = false)
   private String userId;
 
@@ -38,4 +41,5 @@ public class UserRole extends BaseEntity {
   public void setRoleId(long roleId) {
     this.roleId = roleId;
   }
+
 }

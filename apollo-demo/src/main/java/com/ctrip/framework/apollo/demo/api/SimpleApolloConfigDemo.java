@@ -23,6 +23,8 @@ public class SimpleApolloConfigDemo {
   private String DEFAULT_VALUE = "undefined";
   private Config config;
 
+  private Config config2;
+
   public SimpleApolloConfigDemo() {
     ConfigChangeListener changeListener = new ConfigChangeListener() {
       @Override
@@ -38,6 +40,25 @@ public class SimpleApolloConfigDemo {
     };
     config = ConfigService.getAppConfig();
     config.addChangeListener(changeListener);
+
+    initConfig2();
+  }
+
+
+  private void initConfig2() {
+      config2 = ConfigService.getConfig("TEST1.db");
+      config2.addChangeListener(new ConfigChangeListener() {
+          @Override
+          public void onChange(ConfigChangeEvent changeEvent) {
+              logger.info("【2】Changes for namespace {}", changeEvent.getNamespace());
+              for (String key : changeEvent.changedKeys()) {
+                  ConfigChange change = changeEvent.getChange(key);
+                  logger.info("【2】Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+                          change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+                          change.getChangeType());
+              }
+          }
+      });
   }
 
   private String getConfig(String key) {

@@ -36,6 +36,7 @@ public class ReleaseController {
   @Autowired
   private PortalConfig portalConfig;
 
+  // 发布
   @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName)")
   @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases", method = RequestMethod.POST)
   public ReleaseDTO createRelease(@PathVariable String appId,

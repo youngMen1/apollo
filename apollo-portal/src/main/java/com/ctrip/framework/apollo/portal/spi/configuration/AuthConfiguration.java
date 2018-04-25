@@ -1,7 +1,5 @@
 package com.ctrip.framework.apollo.portal.spi.configuration;
 
-import com.google.common.collect.Maps;
-
 import com.ctrip.framework.apollo.common.condition.ConditionalOnMissingProfile;
 import com.ctrip.framework.apollo.portal.component.config.PortalConfig;
 import com.ctrip.framework.apollo.portal.spi.LogoutHandler;
@@ -18,7 +16,7 @@ import com.ctrip.framework.apollo.portal.spi.defaultimpl.DefaultUserInfoHolder;
 import com.ctrip.framework.apollo.portal.spi.defaultimpl.DefaultUserService;
 import com.ctrip.framework.apollo.portal.spi.springsecurity.SpringSecurityUserInfoHolder;
 import com.ctrip.framework.apollo.portal.spi.springsecurity.SpringSecurityUserService;
-
+import com.google.common.collect.Maps;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -41,7 +39,9 @@ import javax.servlet.Filter;
 import java.util.EventListener;
 import java.util.Map;
 
-
+/**
+ * 认证 Spring 配置
+ */
 @Configuration
 public class AuthConfiguration {
 
@@ -183,7 +183,6 @@ public class AuthConfiguration {
 
   }
 
-
   /**
    * spring.profiles.active = auth
    */
@@ -249,7 +248,7 @@ public class AuthConfiguration {
       http.csrf().disable();
       http.headers().frameOptions().sameOrigin();
       http.authorizeRequests().antMatchers("/openapi/**", "/vendor/**", "/styles/**", "/scripts/**", "/views/**", "/img/**").permitAll()
-      .antMatchers("/**").hasAnyRole(USER_ROLE);
+        .antMatchers("/**").hasAnyRole(USER_ROLE);
       http.formLogin().loginPage("/signin").permitAll().failureUrl("/signin?#/error").and().httpBasic();
       http.logout().invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl("/signin?#/logout");
       http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/signin"));
@@ -257,6 +256,7 @@ public class AuthConfiguration {
 
   }
 
+  // TODO 芋艿，SSO
   /**
    * default profile
    */
@@ -301,4 +301,5 @@ public class AuthConfiguration {
       http.headers().frameOptions().sameOrigin();
     }
   }
+
 }

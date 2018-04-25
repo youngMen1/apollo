@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * App Repository
+ */
 public interface AppRepository extends PagingAndSortingRepository<App, Long> {
 
   @Query("SELECT a from App a WHERE a.name LIKE %:name%")

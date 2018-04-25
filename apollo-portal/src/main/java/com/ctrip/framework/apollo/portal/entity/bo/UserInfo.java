@@ -51,6 +51,6 @@ public class UserInfo {
     } else {
       return false;
     }
-
   }
+
 }
