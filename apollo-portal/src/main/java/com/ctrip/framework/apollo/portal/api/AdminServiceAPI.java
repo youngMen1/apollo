@@ -57,43 +57,30 @@ public class AdminServiceAPI {
         };
 
         public List<NamespaceDTO> findNamespaceByCluster(String appId, Env env, String clusterName) {
-            NamespaceDTO[] namespaceDTOs = restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces",
-                    NamespaceDTO[].class, appId,
-                    clusterName);
+            NamespaceDTO[] namespaceDTOs = restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces", NamespaceDTO[].class, appId, clusterName);
             return Arrays.asList(namespaceDTOs);
         }
 
         public NamespaceDTO loadNamespace(String appId, Env env, String clusterName,
                                           String namespaceName) {
-            return
-                    restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}",
-                            NamespaceDTO.class, appId, clusterName, namespaceName);
+            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}", NamespaceDTO.class, appId, clusterName, namespaceName);
         }
 
         public NamespaceDTO findPublicNamespaceForAssociatedNamespace(Env env, String appId, String clusterName,
                                                                       String namespaceName) {
-            return
-                    restTemplate
-                            .get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/associated-public-namespace",
-                                    NamespaceDTO.class, appId, clusterName, namespaceName);
+            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/associated-public-namespace", NamespaceDTO.class, appId, clusterName, namespaceName);
         }
 
         public NamespaceDTO createNamespace(Env env, NamespaceDTO namespace) {
-            return restTemplate
-                    .post(env, "apps/{appId}/clusters/{clusterName}/namespaces", namespace, NamespaceDTO.class,
-                            namespace.getAppId(), namespace.getClusterName());
+            return restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces", namespace, NamespaceDTO.class, namespace.getAppId(), namespace.getClusterName());
         }
 
         public AppNamespaceDTO createAppNamespace(Env env, AppNamespaceDTO appNamespace) {
-            return restTemplate
-                    .post(env, "apps/{appId}/appnamespaces", appNamespace, AppNamespaceDTO.class, appNamespace.getAppId());
+            return restTemplate.post(env, "apps/{appId}/appnamespaces", appNamespace, AppNamespaceDTO.class, appNamespace.getAppId());
         }
 
         public void deleteNamespace(Env env, String appId, String clusterName, String namespaceName, String operator) {
-            restTemplate
-                    .delete(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}?operator={operator}", appId,
-                            clusterName,
-                            namespaceName, operator);
+            restTemplate.delete(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}?operator={operator}", appId, clusterName, namespaceName, operator);
         }
 
         public Map<String, Boolean> getNamespacePublishInfo(Env env, String appId) {
@@ -102,17 +89,12 @@ public class AdminServiceAPI {
 
         public List<NamespaceDTO> getPublicAppNamespaceAllNamespaces(Env env, String publicNamespaceName,
                                                                      int page, int size) {
-            NamespaceDTO[] namespaceDTOs =
-                    restTemplate.get(env, "/appnamespaces/{publicNamespaceName}/namespaces?page={page}&size={size}",
-                            NamespaceDTO[].class, publicNamespaceName, page, size);
+            NamespaceDTO[] namespaceDTOs = restTemplate.get(env, "/appnamespaces/{publicNamespaceName}/namespaces?page={page}&size={size}", NamespaceDTO[].class, publicNamespaceName, page, size);
             return Arrays.asList(namespaceDTOs);
         }
 
         public int countPublicAppNamespaceAssociatedNamespaces(Env env, String publicNamesapceName) {
-            Integer count =
-                    restTemplate.get(env, "/appnamespaces/{publicNamespaceName}/associated-namespaces/count", Integer.class,
-                            publicNamesapceName);
-
+            Integer count = restTemplate.get(env, "/appnamespaces/{publicNamespaceName}/associated-namespaces/count", Integer.class, publicNamesapceName);
             return count == null ? 0 : count;
         }
 

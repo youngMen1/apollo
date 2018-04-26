@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * App 信息
+ * App 实体
  */
 @Entity
 @Table(name = "App")

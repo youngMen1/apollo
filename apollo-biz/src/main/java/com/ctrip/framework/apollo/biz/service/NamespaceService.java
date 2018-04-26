@@ -23,6 +23,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Namespace Service
+ */
 @Service
 public class NamespaceService {
 
@@ -52,7 +55,6 @@ public class NamespaceService {
     private InstanceService instanceService;
     @Autowired
     private MessageSender messageSender;
-
 
     public Namespace findOne(Long namespaceId) {
         return namespaceRepository.findOne(namespaceId);
@@ -226,8 +228,7 @@ public class NamespaceService {
         Objects.requireNonNull(appId, "AppId must not be null");
         Objects.requireNonNull(cluster, "Cluster must not be null");
         Objects.requireNonNull(namespace, "Namespace must not be null");
-        return Objects.isNull(
-                namespaceRepository.findByAppIdAndClusterNameAndNamespaceName(appId, cluster, namespace));
+        return Objects.isNull(namespaceRepository.findByAppIdAndClusterNameAndNamespaceName(appId, cluster, namespace));
     }
 
     @Transactional
@@ -286,15 +287,16 @@ public class NamespaceService {
 
     @Transactional
     public Namespace save(Namespace entity) {
+        // 判断是否已经存在。若是，抛出 ServiceException 异常。
         if (!isNamespaceUnique(entity.getAppId(), entity.getClusterName(), entity.getNamespaceName())) {
             throw new ServiceException("namespace not unique");
         }
+        // 保护代码，避免 Namespace 对象中，已经有 id 属性。
         entity.setId(0);//protection
+        // 保存 Namespace 到数据库
         Namespace namespace = namespaceRepository.save(entity);
-
-        auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.INSERT,
-                namespace.getDataChangeCreatedBy());
-
+        // 【TODO 6002】Audit
+        auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.INSERT, namespace.getDataChangeCreatedBy());
         return namespace;
     }
 
@@ -313,7 +315,9 @@ public class NamespaceService {
 
     @Transactional
     public void instanceOfAppNamespaces(String appId, String clusterName, String createBy) {
+        // 获得所有的 AppNamespace 对象
         List<AppNamespace> appNamespaces = appNamespaceService.findByAppId(appId);
+        // 循环 AppNamespace 数组，创建并保存 Namespace 到数据库
         for (AppNamespace appNamespace : appNamespaces) {
             Namespace ns = new Namespace();
             ns.setAppId(appId);
@@ -322,6 +326,7 @@ public class NamespaceService {
             ns.setDataChangeCreatedBy(createBy);
             ns.setDataChangeLastModifiedBy(createBy);
             namespaceRepository.save(ns);
+            // 【TODO 6002】Audit
             auditService.audit(Namespace.class.getSimpleName(), ns.getId(), Audit.OP.INSERT, createBy);
         }
     }
