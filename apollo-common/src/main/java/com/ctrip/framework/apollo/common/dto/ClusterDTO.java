@@ -1,5 +1,8 @@
 package com.ctrip.framework.apollo.common.dto;
 
+/**
+ * Cluster DTO
+ */
 public class ClusterDTO extends BaseDTO{
 
   private long id;
@@ -41,4 +44,5 @@ public class ClusterDTO extends BaseDTO{
   public void setParentClusterId(long parentClusterId) {
     this.parentClusterId = parentClusterId;
   }
+
 }

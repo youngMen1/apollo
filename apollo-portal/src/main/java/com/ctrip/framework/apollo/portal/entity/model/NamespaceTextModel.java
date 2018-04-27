@@ -1,10 +1,12 @@
 package com.ctrip.framework.apollo.portal.entity.model;
 
-
 import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
 import com.ctrip.framework.apollo.core.enums.Env;
 import com.ctrip.framework.apollo.core.utils.StringUtils;
 
+/**
+ * Namespace 下的配置文件 Model
+ */
 public class NamespaceTextModel implements Verifiable {
 
   private String appId;
@@ -14,7 +16,6 @@ public class NamespaceTextModel implements Verifiable {
   private int namespaceId;
   private String format;
   private String configText;
-
 
   @Override
   public boolean isInvalid() {

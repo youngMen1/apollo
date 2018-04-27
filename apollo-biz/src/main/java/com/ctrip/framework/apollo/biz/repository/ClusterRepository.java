@@ -1,12 +1,14 @@
 package com.ctrip.framework.apollo.biz.repository;
 
-
 import com.ctrip.framework.apollo.biz.entity.Cluster;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
+/**
+ * Cluster Repository
+ */
 public interface ClusterRepository extends PagingAndSortingRepository<Cluster, Long> {
 
   List<Cluster> findByAppIdAndParentClusterId(String appId, Long parentClusterId);
@@ -16,4 +18,5 @@ public interface ClusterRepository extends PagingAndSortingRepository<Cluster, L
   Cluster findByAppIdAndName(String appId, String name);
 
   List<Cluster> findByParentClusterId(Long parentClusterId);
+
 }

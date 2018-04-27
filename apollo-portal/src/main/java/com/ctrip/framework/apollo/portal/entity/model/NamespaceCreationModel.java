@@ -12,7 +12,7 @@ public class NamespaceCreationModel {
      */
     private String env;
     /**
-     *
+     * Namespace 信息
      */
     private NamespaceDTO namespace;
 

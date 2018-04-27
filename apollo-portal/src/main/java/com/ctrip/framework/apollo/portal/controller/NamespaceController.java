@@ -33,6 +33,9 @@ import java.util.Map;
 
 import static com.ctrip.framework.apollo.common.utils.RequestPrecondition.checkModel;
 
+/**
+ * Namespace Controller
+ */
 @RestController
 public class NamespaceController {
 
@@ -83,6 +86,15 @@ public class NamespaceController {
         return namespaceService.findPublicNamespaceForAssociatedNamespace(Env.valueOf(env), appId, clusterName, namespaceName);
     }
 
+    /**
+     * 创建 Namespace
+     *
+     * ps：关联 Namespace 也调用该接口
+     *
+     * @param appId App 编号
+     * @param models NamespaceCreationModel 数组
+     * @return 成功
+     */
     @PreAuthorize(value = "@permissionValidator.hasCreateNamespacePermission(#appId)")
     @RequestMapping(value = "/apps/{appId}/namespaces", method = RequestMethod.POST)
     public ResponseEntity<Void> createNamespace(@PathVariable String appId,

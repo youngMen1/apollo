@@ -142,32 +142,27 @@ public class AdminServiceAPI {
     public static class ClusterAPI extends API {
 
         public List<ClusterDTO> findClustersByApp(String appId, Env env) {
-            ClusterDTO[] clusterDTOs = restTemplate.get(env, "apps/{appId}/clusters", ClusterDTO[].class,
-                    appId);
+            ClusterDTO[] clusterDTOs = restTemplate.get(env, "apps/{appId}/clusters", ClusterDTO[].class, appId);
             return Arrays.asList(clusterDTOs);
         }
 
         public ClusterDTO loadCluster(String appId, Env env, String clusterName) {
-            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}", ClusterDTO.class,
-                    appId, clusterName);
+            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}", ClusterDTO.class, appId, clusterName);
         }
 
         public boolean isClusterUnique(String appId, Env env, String clusterName) {
-            return restTemplate
-                    .get(env, "apps/{appId}/cluster/{clusterName}/unique", Boolean.class,
-                            appId, clusterName);
+            return restTemplate.get(env, "apps/{appId}/cluster/{clusterName}/unique", Boolean.class, appId, clusterName);
 
         }
 
         public ClusterDTO create(Env env, ClusterDTO cluster) {
-            return restTemplate.post(env, "apps/{appId}/clusters", cluster, ClusterDTO.class,
-                    cluster.getAppId());
+            return restTemplate.post(env, "apps/{appId}/clusters", cluster, ClusterDTO.class, cluster.getAppId());
         }
-
 
         public void delete(Env env, String appId, String clusterName, String operator) {
             restTemplate.delete(env, "apps/{appId}/clusters/{clusterName}?operator={operator}", appId, clusterName, operator);
         }
+
     }
 
     @Service
