@@ -104,38 +104,30 @@ public class AdminServiceAPI {
     public static class ItemAPI extends API {
 
         public List<ItemDTO> findItems(String appId, Env env, String clusterName, String namespaceName) {
-            ItemDTO[] itemDTOs =
-                    restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items",
-                            ItemDTO[].class, appId, clusterName, namespaceName);
+            ItemDTO[] itemDTOs = restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items", ItemDTO[].class, appId, clusterName, namespaceName);
             return Arrays.asList(itemDTOs);
         }
 
         public ItemDTO loadItem(Env env, String appId, String clusterName, String namespaceName, String key) {
-            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key}",
-                    ItemDTO.class, appId, clusterName, namespaceName, key);
+            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key}", ItemDTO.class, appId, clusterName, namespaceName, key);
         }
 
-        public void updateItemsByChangeSet(String appId, Env env, String clusterName, String namespace,
-                                           ItemChangeSets changeSets) {
-            restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/itemset",
-                    changeSets, Void.class, appId, clusterName, namespace);
+        public void updateItemsByChangeSet(String appId, Env env, String clusterName, String namespace, ItemChangeSets changeSets) {
+            restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/itemset", changeSets, Void.class, appId, clusterName, namespace);
         }
 
         public void updateItem(String appId, Env env, String clusterName, String namespace, long itemId, ItemDTO item) {
-            restTemplate.put(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{itemId}",
-                    item, appId, clusterName, namespace, itemId);
-
+            restTemplate.put(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{itemId}", item, appId, clusterName, namespace, itemId);
         }
 
         public ItemDTO createItem(String appId, Env env, String clusterName, String namespace, ItemDTO item) {
-            return restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items",
-                    item, ItemDTO.class, appId, clusterName, namespace);
+            return restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items", item, ItemDTO.class, appId, clusterName, namespace);
         }
 
         public void deleteItem(Env env, long itemId, String operator) {
-
             restTemplate.delete(env, "items/{itemId}?operator={operator}", itemId, operator);
         }
+
     }
 
     @Service

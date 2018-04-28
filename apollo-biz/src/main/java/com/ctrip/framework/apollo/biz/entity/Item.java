@@ -35,7 +35,7 @@ public class Item extends BaseEntity {
     @Lob
     private String value;
     /**
-     * 备注
+     * 注释
      */
     @Column(name = "comment")
     private String comment;

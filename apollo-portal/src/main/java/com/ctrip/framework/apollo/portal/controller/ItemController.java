@@ -58,7 +58,7 @@ public class ItemController {
     }
 
     /**
-     * 添加 Item
+     * 创建 Item
      *
      * @param appId App 编号
      * @param env Env
@@ -166,7 +166,8 @@ public class ItemController {
     }
 
     private boolean isValidItem(ItemDTO item) {
-        return Objects.nonNull(item) && !StringUtils.isContainEmpty(item.getKey());
+        return Objects.nonNull(item) // 非空
+                && !StringUtils.isContainEmpty(item.getKey()); // 键非空
     }
 
 }

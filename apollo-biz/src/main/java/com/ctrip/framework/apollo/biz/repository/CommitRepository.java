@@ -9,6 +9,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
+/**
+ * Commit Repository
+ */
 public interface CommitRepository extends PagingAndSortingRepository<Commit, Long> {
 
   List<Commit> findByAppIdAndClusterNameAndNamespaceNameOrderByIdDesc(String appId, String clusterName,

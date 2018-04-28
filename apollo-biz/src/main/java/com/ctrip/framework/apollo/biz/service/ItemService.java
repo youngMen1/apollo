@@ -1,6 +1,5 @@
 package com.ctrip.framework.apollo.biz.service;
 
-
 import com.ctrip.framework.apollo.biz.config.BizConfig;
 import com.ctrip.framework.apollo.biz.entity.Audit;
 import com.ctrip.framework.apollo.biz.entity.Item;
@@ -19,21 +18,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Item Service
+ */
 @Service
 public class ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
-
     @Autowired
     private NamespaceService namespaceService;
-
     @Autowired
     private AuditService auditService;
-
     @Autowired
     private BizConfig bizConfig;
-
 
     @Transactional
     public Item delete(long id, String operator) {
@@ -69,8 +67,7 @@ public class ItemService {
     public Item findLastOne(String appId, String clusterName, String namespaceName) {
         Namespace namespace = namespaceService.findOne(appId, clusterName, namespaceName);
         if (namespace == null) {
-            throw new NotFoundException(
-                    String.format("namespace not found for %s %s %s", appId, clusterName, namespaceName));
+            throw new NotFoundException(String.format("namespace not found for %s %s %s", appId, clusterName, namespaceName));
         }
         return findLastOne(namespace.getId());
     }
@@ -124,22 +121,22 @@ public class ItemService {
 
     @Transactional
     public Item save(Item entity) {
+        // 校验 Key 长度
         checkItemKeyLength(entity.getKey());
+        // 校验 Value 长度
         checkItemValueLength(entity.getNamespaceId(), entity.getValue());
-
-        entity.setId(0);//protection
-
+        // protection
+        entity.setId(0);
+        // 设置 Item 的行号，以 Namespace 下的 Item 最大行号 + 1 。
         if (entity.getLineNum() == 0) {
             Item lastItem = findLastOne(entity.getNamespaceId());
             int lineNum = lastItem == null ? 1 : lastItem.getLineNum() + 1;
             entity.setLineNum(lineNum);
         }
-
+        // 保存 Item
         Item item = itemRepository.save(entity);
-
-        auditService.audit(Item.class.getSimpleName(), item.getId(), Audit.OP.INSERT,
-                item.getDataChangeCreatedBy());
-
+        // 【TODO 6002】Audit
+        auditService.audit(Item.class.getSimpleName(), item.getId(), Audit.OP.INSERT, item.getDataChangeCreatedBy());
         return item;
     }
 

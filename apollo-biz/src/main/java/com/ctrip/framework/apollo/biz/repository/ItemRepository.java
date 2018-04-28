@@ -9,6 +9,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Item Repository
+ */
 public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
 
   Item findByNamespaceIdAndKey(Long namespaceId, String key);

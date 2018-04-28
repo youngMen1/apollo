@@ -1,6 +1,5 @@
 package com.ctrip.framework.apollo.portal.service;
 
-
 import com.ctrip.framework.apollo.common.dto.ItemChangeSets;
 import com.ctrip.framework.apollo.common.dto.ItemDTO;
 import com.ctrip.framework.apollo.common.dto.NamespaceDTO;
@@ -28,6 +27,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Item Service
+ */
 @Service
 public class ItemService {
 
@@ -41,13 +43,13 @@ public class ItemService {
     @Autowired
     @Qualifier("fileTextResolver")
     private ConfigTextResolver fileTextResolver;
-
     @Autowired
     @Qualifier("propertyResolver")
     private ConfigTextResolver propertyResolver;
 
-
     /**
+     * 解析配置文本，并批量更新 Namespace 的 Item 们。
+     *
      * parse config text and update config items
      */
     public void updateConfigItemByText(NamespaceTextModel model) {
@@ -57,17 +59,18 @@ public class ItemService {
         String namespaceName = model.getNamespaceName();
         long namespaceId = model.getNamespaceId();
         String configText = model.getConfigText();
-
+        // 获得对应格式的 ConfigTextResolver 对象
         ConfigTextResolver resolver = model.getFormat() == ConfigFileFormat.Properties ? propertyResolver : fileTextResolver;
-
+        // 解析成 ItemChangeSets
         ItemChangeSets changeSets = resolver.resolve(namespaceId, configText, itemAPI.findItems(appId, env, clusterName, namespaceName));
         if (changeSets.isEmpty()) {
             return;
         }
-
+        // 设置修改人为当前管理员
         changeSets.setDataChangeLastModifiedBy(userInfoHolder.getUser().getUserId());
+        // 调用 Admin Service API ，批量更新 Item 们。
         updateItems(appId, env, clusterName, namespaceName, changeSets);
-
+        // 【TODO 6001】Tracer 日志
         Tracer.logEvent(TracerEventType.MODIFY_NAMESPACE_BY_TEXT, String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
         Tracer.logEvent(TracerEventType.MODIFY_NAMESPACE, String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
     }

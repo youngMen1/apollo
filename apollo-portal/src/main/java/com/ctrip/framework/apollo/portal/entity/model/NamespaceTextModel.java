@@ -9,72 +9,93 @@ import com.ctrip.framework.apollo.core.utils.StringUtils;
  */
 public class NamespaceTextModel implements Verifiable {
 
-  private String appId;
-  private String env;
-  private String clusterName;
-  private String namespaceName;
-  private int namespaceId;
-  private String format;
-  private String configText;
+    /**
+     * App 编号
+     */
+    private String appId;
+    /**
+     * Env 名
+     */
+    private String env;
+    /**
+     * Cluster 名
+     */
+    private String clusterName;
+    /**
+     * Namespace 名
+     */
+    private String namespaceName;
+    /**
+     * Namespace 编号
+     */
+    private int namespaceId;
+    /**
+     * 格式
+     */
+    private String format;
+    /**
+     * 配置文本
+     */
+    private String configText;
 
-  @Override
-  public boolean isInvalid() {
-    return StringUtils.isContainEmpty(appId, env, clusterName, namespaceName) || namespaceId <= 0;
-  }
+    @Override
+    public boolean isInvalid() {
+        return StringUtils.isContainEmpty(appId, env, clusterName, namespaceName) || namespaceId <= 0;
+    }
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public Env getEnv() {
-    return Env.valueOf(env);
-  }
+    public Env getEnv() {
+        return Env.valueOf(env);
+    }
 
-  public void setEnv(String env) {
-    this.env = env;
-  }
+    public void setEnv(String env) {
+        this.env = env;
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  public void setClusterName(String clusterName) {
-    this.clusterName = clusterName;
-  }
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public int getNamespaceId() {
-    return namespaceId;
-  }
+    public int getNamespaceId() {
+        return namespaceId;
+    }
 
-  public void setNamespaceId(int namespaceId) {
-    this.namespaceId = namespaceId;
-  }
+    public void setNamespaceId(int namespaceId) {
+        this.namespaceId = namespaceId;
+    }
 
-  public String getConfigText() {
-    return configText;
-  }
+    public String getConfigText() {
+        return configText;
+    }
 
-  public void setConfigText(String configText) {
-    this.configText = configText;
-  }
+    public void setConfigText(String configText) {
+        this.configText = configText;
+    }
 
-  public ConfigFileFormat getFormat() {
-    return ConfigFileFormat.fromString(this.format);
-  }
+    public ConfigFileFormat getFormat() {
+        return ConfigFileFormat.fromString(this.format);
+    }
 
-  public void setFormat(String format) {
-    this.format = format;
-  }
+    public void setFormat(String format) {
+        this.format = format;
+    }
 }
