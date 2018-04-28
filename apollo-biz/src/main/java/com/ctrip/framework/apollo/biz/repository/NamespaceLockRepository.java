@@ -4,6 +4,9 @@ import com.ctrip.framework.apollo.biz.entity.NamespaceLock;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+/**
+ * NamespaceLock Repository
+ */
 public interface NamespaceLockRepository extends PagingAndSortingRepository<NamespaceLock, Long> {
 
   NamespaceLock findByNamespaceId(Long namespaceId);
