@@ -54,7 +54,6 @@ public class ReleaseService {
         return releaseRepository.findOne(releaseId);
     }
 
-
     public Release findActiveOne(long releaseId) {
         return releaseRepository.findByIdAndIsAbandonedFalse(releaseId);
     }
@@ -77,8 +76,7 @@ public class ReleaseService {
 
     public Release findLatestActiveRelease(String appId, String clusterName, String namespaceName) {
         return releaseRepository.findFirstByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(appId,
-                clusterName,
-                namespaceName);
+                clusterName, namespaceName); // IsAbandoned = False && Id DESC
     }
 
     public List<Release> findAllReleases(String appId, String clusterName, String namespaceName, Pageable page) {
@@ -93,11 +91,8 @@ public class ReleaseService {
     }
 
     public List<Release> findActiveReleases(String appId, String clusterName, String namespaceName, Pageable page) {
-        List<Release>
-                releases =
-                releaseRepository.findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(appId, clusterName,
-                        namespaceName,
-                        page);
+        List<Release> releases = releaseRepository.findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(
+                appId, clusterName, namespaceName, page);
         if (releases == null) {
             return Collections.emptyList();
         }
@@ -127,46 +122,42 @@ public class ReleaseService {
         return masterRelease(namespace, releaseName, releaseComment, operateNamespaceItems,
                 changeSets.getDataChangeLastModifiedBy(),
                 ReleaseOperation.GRAY_RELEASE_MERGE_TO_MASTER, operationContext);
-
     }
 
+    // 发布配置
     @Transactional
-    public Release publish(Namespace namespace, String releaseName, String releaseComment,
-                           String operator, boolean isEmergencyPublish) {
-
+    public Release publish(Namespace namespace, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish) {
+        // 校验锁定
         checkLock(namespace, isEmergencyPublish, operator);
-
+        // 获得 Namespace 的普通配置 Map
         Map<String, String> operateNamespaceItems = getNamespaceItems(namespace);
-
+        // 【TODO 6005】abtest
         Namespace parentNamespace = namespaceService.findParentNamespace(namespace);
-
-        //branch release
+        // 【TODO 6005】abtest
+        // branch release
         if (parentNamespace != null) {
-            return publishBranchNamespace(parentNamespace, namespace, operateNamespaceItems,
-                    releaseName, releaseComment, operator, isEmergencyPublish);
+            return publishBranchNamespace(parentNamespace, namespace, operateNamespaceItems, releaseName, releaseComment, operator, isEmergencyPublish);
         }
-
+        // 【TODO 6005】abtest
         Namespace childNamespace = namespaceService.findChildNamespace(namespace);
-
+        // 【TODO 6005】abtest
         Release previousRelease = null;
         if (childNamespace != null) {
             previousRelease = findLatestActiveRelease(namespace);
         }
-
-        //master release
+        // 创建操作 Context
+        // master release
         Map<String, Object> operationContext = Maps.newHashMap();
-        operationContext.put(ReleaseOperationContext.IS_EMERGENCY_PUBLISH, isEmergencyPublish);
-
-        Release release = masterRelease(namespace, releaseName, releaseComment, operateNamespaceItems,
-                operator, ReleaseOperation.NORMAL_RELEASE, operationContext);
-
-        //merge to branch and auto release
+        operationContext.put(ReleaseOperationContext.IS_EMERGENCY_PUBLISH, isEmergencyPublish); // 是否紧急发布。
+        // 主干发布
+        Release release = masterRelease(namespace, releaseName, releaseComment, operateNamespaceItems, operator, ReleaseOperation.NORMAL_RELEASE, operationContext);
+        // 【TODO 6005】abtest
+        // merge to branch and auto release
         if (childNamespace != null) {
             mergeFromMasterAndPublishBranch(namespace, childNamespace, operateNamespaceItems,
                     releaseName, releaseComment, operator, previousRelease,
                     release, isEmergencyPublish);
         }
-
         return release;
     }
 
@@ -174,7 +165,7 @@ public class ReleaseService {
         if (!isEmergencyPublish) { // 非紧急发布
             // 获得 NamespaceLock 对象
             NamespaceLock lock = namespaceLockService.findLock(namespace.getId());
-            // 校验锁定人是否是当前管理员。若不是，抛出 BadRequestException 异常
+            // 校验锁定人是否是当前管理员。若是，抛出 BadRequestException 异常
             if (lock != null && lock.getDataChangeCreatedBy().equals(operator)) {
                 throw new BadRequestException("Config can not be published by yourself.");
             }
@@ -223,19 +214,21 @@ public class ReleaseService {
 
     }
 
+    // 主干发布配置
     private Release masterRelease(Namespace namespace, String releaseName, String releaseComment,
                                   Map<String, String> configurations, String operator,
                                   int releaseOperation, Map<String, Object> operationContext) {
+        // 获得最后有效的 Release 对象
         Release lastActiveRelease = findLatestActiveRelease(namespace);
         long previousReleaseId = lastActiveRelease == null ? 0 : lastActiveRelease.getId();
-        Release release = createRelease(namespace, releaseName, releaseComment,
-                configurations, operator);
+        // 创建 Release 对象，并保存
+        Release release = createRelease(namespace, releaseName, releaseComment, configurations, operator);
 
+        // 创建 ReleaseHistory 对象，并保存
         releaseHistoryService.createReleaseHistory(namespace.getAppId(), namespace.getClusterName(),
                 namespace.getNamespaceName(), namespace.getClusterName(),
                 release.getId(), previousReleaseId, releaseOperation,
                 operationContext, operator);
-
         return release;
     }
 
@@ -291,9 +284,16 @@ public class ReleaseService {
         return result;
     }
 
-
+    /**
+     * 获得 Namespace 的普通配置 Map
+     *
+     * @param namespace Namespace
+     * @return 普通配置 Map
+     */
     private Map<String, String> getNamespaceItems(Namespace namespace) {
+        // 读取 Namespace 的 Item 集合
         List<Item> items = itemService.findItemsWithoutOrdered(namespace.getId());
+        // 生成普通配置 Map 。过滤掉注释和空行的配置项
         Map<String, String> configurations = new HashMap<String, String>();
         for (Item item : items) {
             if (StringUtils.isEmpty(item.getKey())) {
@@ -301,7 +301,6 @@ public class ReleaseService {
             }
             configurations.put(item.getKey(), item.getValue());
         }
-
         return configurations;
     }
 
@@ -314,10 +313,12 @@ public class ReleaseService {
         return configuration;
     }
 
+    // 创建 Release 对象，并保存
     private Release createRelease(Namespace namespace, String name, String comment,
                                   Map<String, String> configurations, String operator) {
+        // 创建 Release 对象
         Release release = new Release();
-        release.setReleaseKey(ReleaseKeyGenerator.generateReleaseKey(namespace));
+        release.setReleaseKey(ReleaseKeyGenerator.generateReleaseKey(namespace)); //【TODO 6006】Release Key 用途？
         release.setDataChangeCreatedTime(new Date());
         release.setDataChangeCreatedBy(operator);
         release.setDataChangeLastModifiedBy(operator);
@@ -326,13 +327,13 @@ public class ReleaseService {
         release.setAppId(namespace.getAppId());
         release.setClusterName(namespace.getClusterName());
         release.setNamespaceName(namespace.getNamespaceName());
-        release.setConfigurations(gson.toJson(configurations));
+        release.setConfigurations(gson.toJson(configurations)); // 使用 Gson ，将配置 Map 格式化成字符串。
+        // 保存 Release 对象
         release = releaseRepository.save(release);
-
+        // 释放 NamespaceLock
         namespaceLockService.unlock(namespace.getId());
-        auditService.audit(Release.class.getSimpleName(), release.getId(), Audit.OP.INSERT,
-                release.getDataChangeCreatedBy());
-
+        // 【TODO 6002】audit
+        auditService.audit(Release.class.getSimpleName(), release.getId(), Audit.OP.INSERT, release.getDataChangeCreatedBy());
         return release;
     }
 

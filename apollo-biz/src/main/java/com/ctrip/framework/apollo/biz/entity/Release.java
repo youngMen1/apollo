@@ -1,7 +1,6 @@
 package com.ctrip.framework.apollo.biz.entity;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -11,105 +10,127 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
+ * Release 实体
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 @Entity
 @Table(name = "Release")
-@SQLDelete(sql = "Update Release set isDeleted = 1 where id = ?")
+@SQLDelete(sql = "Update Release set isDeleted = 1 where id = ?") // 标记删除
 @Where(clause = "isDeleted = 0")
 public class Release extends BaseEntity {
-  @Column(name = "ReleaseKey", nullable = false)
-  private String releaseKey;
 
-  @Column(name = "Name", nullable = false)
-  private String name;
+    /**
+     * Release Key
+     *
+     * 【TODO 6006】用途？
+     */
+    @Column(name = "ReleaseKey", nullable = false)
+    private String releaseKey;
+    /**
+     * 标题
+     */
+    @Column(name = "Name", nullable = false)
+    private String name;
+    /**
+     * 备注
+     */
+    @Column(name = "Comment", nullable = false)
+    private String comment;
+    /**
+     * App 编号
+     */
+    @Column(name = "AppId", nullable = false)
+    private String appId;
+    /**
+     * Cluster 名字
+     */
+    @Column(name = "ClusterName", nullable = false)
+    private String clusterName;
+    /**
+     * Namespace 名字
+     */
+    @Column(name = "NamespaceName", nullable = false)
+    private String namespaceName;
+    /**
+     * 配置 Map 字符串，使用 JSON 格式化成字符串
+     */
+    @Column(name = "Configurations", nullable = false)
+    @Lob
+    private String configurations;
+    /**
+     * 是否被回滚（放弃）
+     */
+    @Column(name = "IsAbandoned", columnDefinition = "Bit default '0'")
+    private boolean isAbandoned;
 
-  @Column(name = "AppId", nullable = false)
-  private String appId;
+    public String getReleaseKey() {
+        return releaseKey;
+    }
 
-  @Column(name = "ClusterName", nullable = false)
-  private String clusterName;
+    public String getAppId() {
+        return appId;
+    }
 
-  @Column(name = "NamespaceName", nullable = false)
-  private String namespaceName;
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  @Column(name = "Configurations", nullable = false)
-  @Lob
-  private String configurations;
+    public String getComment() {
+        return comment;
+    }
 
-  @Column(name = "Comment", nullable = false)
-  private String comment;
+    public String getConfigurations() {
+        return configurations;
+    }
 
-  @Column(name = "IsAbandoned", columnDefinition = "Bit default '0'")
-  private boolean isAbandoned;
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public String getReleaseKey() {
-    return releaseKey;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getAppId() {
-    return appId;
-  }
+    public void setReleaseKey(String releaseKey) {
+        this.releaseKey = releaseKey;
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getComment() {
-    return comment;
-  }
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
-  public String getConfigurations() {
-    return configurations;
-  }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public void setConfigurations(String configurations) {
+        this.configurations = configurations;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public void setReleaseKey(String releaseKey) {
-    this.releaseKey = releaseKey;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public boolean isAbandoned() {
+        return isAbandoned;
+    }
 
-  public void setClusterName(String clusterName) {
-    this.clusterName = clusterName;
-  }
+    public void setAbandoned(boolean abandoned) {
+        isAbandoned = abandoned;
+    }
 
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
-  public void setConfigurations(String configurations) {
-    this.configurations = configurations;
-  }
-
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public boolean isAbandoned() {
-    return isAbandoned;
-  }
-
-  public void setAbandoned(boolean abandoned) {
-    isAbandoned = abandoned;
-  }
-
-  public String toString() {
-    return toStringHelper().add("name", name).add("appId", appId).add("clusterName", clusterName)
-        .add("namespaceName", namespaceName).add("configurations", configurations)
-        .add("comment", comment).add("isAbandoned", isAbandoned).toString();
-  }
+    public String toString() {
+        return toStringHelper().add("name", name).add("appId", appId).add("clusterName", clusterName)
+                .add("namespaceName", namespaceName).add("configurations", configurations)
+                .add("comment", comment).add("isAbandoned", isAbandoned).toString();
+    }
 }

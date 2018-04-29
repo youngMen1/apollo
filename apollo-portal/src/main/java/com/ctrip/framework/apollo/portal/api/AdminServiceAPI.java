@@ -170,39 +170,25 @@ public class AdminServiceAPI {
             if (CollectionUtils.isEmpty(releaseIds)) {
                 return Collections.emptyList();
             }
-
-            ReleaseDTO[]
-                    releases =
-                    restTemplate.get(env, "/releases?releaseIds={releaseIds}", ReleaseDTO[].class, JOINER.join(releaseIds));
+            ReleaseDTO[] releases = restTemplate.get(env, "/releases?releaseIds={releaseIds}", ReleaseDTO[].class, JOINER.join(releaseIds));
             return Arrays.asList(releases);
-
         }
 
-        public List<ReleaseDTO> findAllReleases(String appId, Env env, String clusterName, String namespaceName, int page,
-                                                int size) {
-            ReleaseDTO[] releaseDTOs = restTemplate.get(
-                    env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/all?page={page}&size={size}",
-                    ReleaseDTO[].class,
-                    appId, clusterName, namespaceName, page, size);
+        public List<ReleaseDTO> findAllReleases(String appId, Env env, String clusterName, String namespaceName, int page, int size) {
+            ReleaseDTO[] releaseDTOs = restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/all?page={page}&size={size}",
+                    ReleaseDTO[].class, appId, clusterName, namespaceName, page, size);
             return Arrays.asList(releaseDTOs);
         }
 
-        public List<ReleaseDTO> findActiveReleases(String appId, Env env, String clusterName, String namespaceName,
-                                                   int page,
-                                                   int size) {
-            ReleaseDTO[] releaseDTOs = restTemplate.get(
-                    env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/active?page={page}&size={size}",
-                    ReleaseDTO[].class,
-                    appId, clusterName, namespaceName, page, size);
+        public List<ReleaseDTO> findActiveReleases(String appId, Env env, String clusterName, String namespaceName, int page, int size) {
+            ReleaseDTO[] releaseDTOs = restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/active?page={page}&size={size}",
+                    ReleaseDTO[].class, appId, clusterName, namespaceName, page, size);
             return Arrays.asList(releaseDTOs);
         }
 
-        public ReleaseDTO loadLatestRelease(String appId, Env env, String clusterName,
-                                            String namespace) {
-            ReleaseDTO releaseDTO = restTemplate
-                    .get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/latest",
+        public ReleaseDTO loadLatestRelease(String appId, Env env, String clusterName, String namespace) {
+            return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/latest",
                             ReleaseDTO.class, appId, clusterName, namespace);
-            return releaseDTO;
         }
 
         public ReleaseDTO createRelease(String appId, Env env, String clusterName, String namespace,
@@ -215,10 +201,8 @@ public class AdminServiceAPI {
             parameters.add("comment", releaseComment);
             parameters.add("operator", operator);
             parameters.add("isEmergencyPublish", String.valueOf(isEmergencyPublish));
-            HttpEntity<MultiValueMap<String, String>> entity =
-                    new HttpEntity<>(parameters, headers);
-            ReleaseDTO response = restTemplate.post(
-                    env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases", entity,
+            HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(parameters, headers);
+            ReleaseDTO response = restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases", entity,
                     ReleaseDTO.class, appId, clusterName, namespace);
             return response;
         }
@@ -226,9 +210,7 @@ public class AdminServiceAPI {
         public ReleaseDTO updateAndPublish(String appId, Env env, String clusterName, String namespace,
                                            String releaseName, String releaseComment, String branchName,
                                            boolean isEmergencyPublish, boolean deleteBranch, ItemChangeSets changeSets) {
-
-            return restTemplate.post(env,
-                    "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/updateAndPublish?"
+            return restTemplate.post(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/updateAndPublish?"
                             + "releaseName={releaseName}&releaseComment={releaseComment}&branchName={branchName}"
                             + "&deleteBranch={deleteBranch}&isEmergencyPublish={isEmergencyPublish}",
                     changeSets, ReleaseDTO.class, appId, clusterName, namespace,
@@ -237,10 +219,9 @@ public class AdminServiceAPI {
         }
 
         public void rollback(Env env, long releaseId, String operator) {
-            restTemplate.put(env,
-                    "releases/{releaseId}/rollback?operator={operator}",
-                    null, releaseId, operator);
+            restTemplate.put(env, "releases/{releaseId}/rollback?operator={operator}", null, releaseId, operator);
         }
+
     }
 
     @Service

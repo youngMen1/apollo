@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Release Repository
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ReleaseRepository extends PagingAndSortingRepository<Release, Long> {
 
-  Release findFirstByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(@Param("appId") String appId, @Param("clusterName") String clusterName,
-                                                                                         @Param("namespaceName") String namespaceName);
+  Release findFirstByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(@Param("appId") String appId, @Param("clusterName") String clusterName, @Param("namespaceName") String namespaceName);
 
   Release findByIdAndIsAbandonedFalse(long id);
 
@@ -35,4 +36,5 @@ public interface ReleaseRepository extends PagingAndSortingRepository<Release, L
 
   // For release history conversion program, need to delete after conversion it done
   List<Release> findByAppIdAndClusterNameAndNamespaceNameOrderByIdAsc(String appId, String clusterName, String namespaceName);
+
 }
