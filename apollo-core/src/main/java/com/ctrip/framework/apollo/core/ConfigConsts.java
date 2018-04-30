@@ -1,6 +1,7 @@
 package com.ctrip.framework.apollo.core;
 
 public interface ConfigConsts {
+
   String NAMESPACE_APPLICATION = "application";
   String CLUSTER_NAME_DEFAULT = "default";
   String CLUSTER_NAMESPACE_SEPARATOR = "+";
@@ -8,4 +9,5 @@ public interface ConfigConsts {
   String CONFIG_FILE_CONTENT_KEY = "content";
   String NO_APPID_PLACEHOLDER = "ApolloNoAppIdPlaceHolder";
   long NOTIFICATION_ID_PLACEHOLDER = -1;
+
 }

@@ -67,4 +67,5 @@ public class ApolloConfigNotification {
                 ", notificationId=" + notificationId +
                 '}';
     }
+
 }
