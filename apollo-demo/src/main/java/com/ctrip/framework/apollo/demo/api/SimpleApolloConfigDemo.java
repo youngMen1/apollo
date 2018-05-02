@@ -46,7 +46,9 @@ public class SimpleApolloConfigDemo {
 
 
   private void initConfig2() {
-      config2 = ConfigService.getConfig("TEST1.db");
+//      config2 = ConfigService.getConfig("TEST1.db");
+//      config2 = ConfigService.getConfig("TEST1.first");
+      config2 = ConfigService.getConfig("test1.first");
       config2.addChangeListener(new ConfigChangeListener() {
           @Override
           public void onChange(ConfigChangeEvent changeEvent) {

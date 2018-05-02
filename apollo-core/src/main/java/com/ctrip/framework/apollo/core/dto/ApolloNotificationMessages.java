@@ -6,17 +6,17 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 
 /**
- * 通知消息集合
+ * 通知消息集合 DTO
  *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ApolloNotificationMessages {
 
     /**
-     * 明细
+     * 明细 Map
      *
-     * Key ：{appId} "+" {clusterName} "+" {namespace} ，例如：100004458+default+application
-     * Value ：通知编号
+     * KEY ：{appId} "+" {clusterName} "+" {namespace} ，例如：100004458+default+application
+     * VALUE ：通知编号
      */
     private Map<String, Long> details;
 
@@ -56,11 +56,10 @@ public class ApolloNotificationMessages {
         if (source == null) {
             return;
         }
-
         for (Map.Entry<String, Long> entry : source.getDetails().entrySet()) {
-            //to make sure the notification id always grows bigger
-            if (this.has(entry.getKey()) &&
-                    this.get(entry.getKey()) >= entry.getValue()) {
+            // to make sure the notification id always grows bigger
+            // 只合并新的通知编号大于的情况
+            if (this.has(entry.getKey()) && this.get(entry.getKey()) >= entry.getValue()) {
                 continue;
             }
             this.put(entry.getKey(), entry.getValue());

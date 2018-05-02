@@ -1,12 +1,14 @@
 package com.ctrip.framework.apollo.core.dto;
 
 /**
+ * Apollo 配置通知 DTO
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ApolloConfigNotification {
 
     /**
-     * 命名空间
+     * Namespace 名字
      */
     private String namespaceName;
     /**
@@ -20,7 +22,7 @@ public class ApolloConfigNotification {
      */
     private volatile ApolloNotificationMessages messages;
 
-    //for json converter
+    // for json converter
     public ApolloConfigNotification() {
     }
 
@@ -50,6 +52,7 @@ public class ApolloConfigNotification {
     }
 
     public void addMessage(String key, long notificationId) {
+        // 创建 ApolloNotificationMessages 对象
         if (this.messages == null) {
             synchronized (this) {
                 if (this.messages == null) {
@@ -57,6 +60,7 @@ public class ApolloConfigNotification {
                 }
             }
         }
+        // 添加到 `messages` 中
         this.messages.put(key, notificationId);
     }
 
