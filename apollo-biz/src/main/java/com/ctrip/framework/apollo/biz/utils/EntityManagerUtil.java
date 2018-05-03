@@ -9,23 +9,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
+ * EntityManager 工具类
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 @Component
 public class EntityManagerUtil extends EntityManagerFactoryAccessor {
-  private static final Logger logger = LoggerFactory.getLogger(EntityManagerUtil.class);
-  /**
-   * close the entity manager.
-   * Use it with caution! This is only intended for use with async request, which Spring won't
-   * close the entity manager until the async request is finished.
-   */
-  public void closeEntityManager() {
-    EntityManagerHolder emHolder = (EntityManagerHolder)
-        TransactionSynchronizationManager.getResource(getEntityManagerFactory());
-    if (emHolder == null) {
-      return;
+
+    private static final Logger logger = LoggerFactory.getLogger(EntityManagerUtil.class);
+
+    /**
+     * close the entity manager.
+     * Use it with caution! This is only intended for use with async request, which Spring won't
+     * close the entity manager until the async request is finished.
+     */
+    public void closeEntityManager() {
+        // 获得 EntityManagerHolder 对象
+        EntityManagerHolder emHolder = (EntityManagerHolder) TransactionSynchronizationManager.getResource(getEntityManagerFactory());
+        if (emHolder == null) {
+            return;
+        }
+        logger.debug("Closing JPA EntityManager in EntityManagerUtil");
+        // 关闭 EntityManager
+        EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
     }
-    logger.debug("Closing JPA EntityManager in EntityManagerUtil");
-    EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
-  }
+
 }
