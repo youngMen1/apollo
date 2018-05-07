@@ -188,7 +188,7 @@ public class AdminServiceAPI {
 
         public ReleaseDTO loadLatestRelease(String appId, Env env, String clusterName, String namespace) {
             return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/latest",
-                            ReleaseDTO.class, appId, clusterName, namespace);
+                    ReleaseDTO.class, appId, clusterName, namespace);
         }
 
         public ReleaseDTO createRelease(String appId, Env env, String clusterName, String namespace,
@@ -243,10 +243,9 @@ public class AdminServiceAPI {
 
         public NamespaceLockDTO getNamespaceLockOwner(String appId, Env env, String clusterName, String namespaceName) {
             return restTemplate.get(env, "apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/lock",
-                    NamespaceLockDTO.class,
-                    appId, clusterName, namespaceName);
-
+                    NamespaceLockDTO.class, appId, clusterName, namespaceName);
         }
+
     }
 
     @Service
@@ -309,41 +308,31 @@ public class AdminServiceAPI {
     @Service
     public static class NamespaceBranchAPI extends API {
 
-        public NamespaceDTO createBranch(String appId, Env env, String clusterName,
-                                         String namespaceName, String operator) {
-            return restTemplate
-                    .post(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches?operator={operator}",
-                            null, NamespaceDTO.class, appId, clusterName, namespaceName, operator);
+        public NamespaceDTO createBranch(String appId, Env env, String clusterName, String namespaceName, String operator) {
+            return restTemplate.post(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches?operator={operator}",
+                    null, NamespaceDTO.class, appId, clusterName, namespaceName, operator);
         }
 
-        public NamespaceDTO findBranch(String appId, Env env, String clusterName,
-                                       String namespaceName) {
+        public NamespaceDTO findBranch(String appId, Env env, String clusterName, String namespaceName) {
             return restTemplate.get(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches",
                     NamespaceDTO.class, appId, clusterName, namespaceName);
         }
 
-        public GrayReleaseRuleDTO findBranchGrayRules(String appId, Env env, String clusterName,
-                                                      String namespaceName, String branchName) {
-            return restTemplate
-                    .get(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules",
+        public GrayReleaseRuleDTO findBranchGrayRules(String appId, Env env, String clusterName, String namespaceName, String branchName) {
+            return restTemplate.get(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules",
                             GrayReleaseRuleDTO.class, appId, clusterName, namespaceName, branchName);
-
         }
 
-        public void updateBranchGrayRules(String appId, Env env, String clusterName,
-                                          String namespaceName, String branchName, GrayReleaseRuleDTO rules) {
-            restTemplate
-                    .put(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules",
+        public void updateBranchGrayRules(String appId, Env env, String clusterName, String namespaceName, String branchName, GrayReleaseRuleDTO rules) {
+            restTemplate.put(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules",
                             rules, appId, clusterName, namespaceName, branchName);
-
         }
 
-        public void deleteBranch(String appId, Env env, String clusterName,
-                                 String namespaceName, String branchName, String operator) {
-            restTemplate.delete(env,
-                    "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}?operator={operator}",
+        public void deleteBranch(String appId, Env env, String clusterName, String namespaceName, String branchName, String operator) {
+            restTemplate.delete(env, "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}?operator={operator}",
                     appId, clusterName, namespaceName, branchName, operator);
         }
+
     }
 
     @Service

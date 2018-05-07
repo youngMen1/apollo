@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Namespace 分支 Controller
+ */
 @RestController
 public class NamespaceBranchController {
 
@@ -27,17 +30,15 @@ public class NamespaceBranchController {
     @Autowired
     private NamespaceService namespaceService;
 
-
     @RequestMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/branches", method = RequestMethod.POST)
     public NamespaceDTO createBranch(@PathVariable String appId,
                                      @PathVariable String clusterName,
                                      @PathVariable String namespaceName,
                                      @RequestParam("operator") String operator) {
-
+        // 校验 Namespace 是否存在
         checkNamespace(appId, clusterName, namespaceName);
-
+        // 创建子 Namespace
         Namespace createdBranch = namespaceBranchService.createBranch(appId, clusterName, namespaceName, operator);
-
         return BeanUtils.transfrom(NamespaceDTO.class, createdBranch);
     }
 
@@ -127,13 +128,15 @@ public class NamespaceBranchController {
 
     }
 
+    // 校验 Namespace 是否存在
     private void checkNamespace(String appId, String clusterName, String namespaceName) {
+        // 查询父 Namespace 对象
         Namespace parentNamespace = namespaceService.findOne(appId, clusterName, namespaceName);
+        // 若父 Namespace 不存在，抛出 BadRequestException 异常
         if (parentNamespace == null) {
-            throw new BadRequestException(String.format("Namespace not exist. AppId = %s, ClusterName = %s, NamespaceName = %s", appId,
-                    clusterName, namespaceName));
+            throw new BadRequestException(String.format("Namespace not exist. AppId = %s, ClusterName = %s, NamespaceName = %s",
+                    appId, clusterName, namespaceName));
         }
     }
-
 
 }
