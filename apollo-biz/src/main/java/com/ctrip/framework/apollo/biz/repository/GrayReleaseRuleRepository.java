@@ -6,14 +6,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-
+/**
+ * GrayReleaseRule Repository
+ */
 public interface GrayReleaseRuleRepository extends PagingAndSortingRepository<GrayReleaseRule, Long> {
 
-  GrayReleaseRule findTopByAppIdAndClusterNameAndNamespaceNameAndBranchNameOrderByIdDesc(String appId, String clusterName,
-                                                                                         String namespaceName, String branchName);
+  GrayReleaseRule findTopByAppIdAndClusterNameAndNamespaceNameAndBranchNameOrderByIdDesc(String appId, String clusterName, String namespaceName, String branchName);
 
-  List<GrayReleaseRule> findByAppIdAndClusterNameAndNamespaceName(String appId,
-                                                               String clusterName, String namespaceName);
+  List<GrayReleaseRule> findByAppIdAndClusterNameAndNamespaceName(String appId, String clusterName, String namespaceName);
 
   List<GrayReleaseRule> findFirst500ByIdGreaterThanOrderByIdAsc(Long id);
 

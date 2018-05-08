@@ -7,46 +7,60 @@ import java.util.Set;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
+ * GrayRelease 规则项 DTO
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class GrayReleaseRuleItemDTO {
-  public static final String ALL_IP = "*";
 
-  private String clientAppId;
-  private Set<String> clientIpList;
+    public static final String ALL_IP = "*";
 
-  public GrayReleaseRuleItemDTO(String clientAppId) {
-    this(clientAppId, Sets.newHashSet());
-  }
+    /**
+     * 客户端 App 编号
+     */
+    private String clientAppId;
+    /**
+     * 客户端 IP 集合
+     */
+    private Set<String> clientIpList;
 
-  public GrayReleaseRuleItemDTO(String clientAppId, Set<String> clientIpList) {
-    this.clientAppId = clientAppId;
-    this.clientIpList = clientIpList;
-  }
+    public GrayReleaseRuleItemDTO(String clientAppId) {
+        this(clientAppId, Sets.newHashSet());
+    }
 
-  public String getClientAppId() {
-    return clientAppId;
-  }
+    public GrayReleaseRuleItemDTO(String clientAppId, Set<String> clientIpList) {
+        this.clientAppId = clientAppId;
+        this.clientIpList = clientIpList;
+    }
 
-  public Set<String> getClientIpList() {
-    return clientIpList;
-  }
+    public String getClientAppId() {
+        return clientAppId;
+    }
 
-  public boolean matches(String clientAppId, String clientIp) {
-    return appIdMatches(clientAppId) && ipMatches(clientIp);
-  }
+    public Set<String> getClientIpList() {
+        return clientIpList;
+    }
 
-  private boolean appIdMatches(String clientAppId) {
-    return this.clientAppId.equals(clientAppId);
-  }
+    // 匹配方法 BEGIN
 
-  private boolean ipMatches(String clientIp) {
-    return this.clientIpList.contains(ALL_IP) || clientIpList.contains(clientIp);
-  }
+    public boolean matches(String clientAppId, String clientIp) {
+        return appIdMatches(clientAppId) && ipMatches(clientIp);
+    }
 
-  @Override
-  public String toString() {
-    return toStringHelper(this).add("clientAppId", clientAppId)
-        .add("clientIpList", clientIpList).toString();
-  }
+    private boolean appIdMatches(String clientAppId) {
+        return this.clientAppId.equals(clientAppId);
+    }
+
+    private boolean ipMatches(String clientIp) {
+        return this.clientIpList.contains(ALL_IP) || clientIpList.contains(clientIp);
+    }
+
+    // 匹配方法 END
+
+    @Override
+    public String toString() {
+        return toStringHelper(this).add("clientAppId", clientAppId)
+                .add("clientIpList", clientIpList).toString();
+    }
+
 }

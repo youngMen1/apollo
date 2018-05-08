@@ -115,16 +115,13 @@ public class NamespaceBranchController {
         return namespaceBranchService.findBranchGrayRules(appId, Env.valueOf(env), clusterName, namespaceName, branchName);
     }
 
-
+    // 更新 Namespace 分支的灰度规则
     @PreAuthorize(value = "@permissionValidator.hasOperateNamespacePermission(#appId, #namespaceName)")
     @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules", method = RequestMethod.PUT)
     public void updateBranchRules(@PathVariable String appId, @PathVariable String env,
                                   @PathVariable String clusterName, @PathVariable String namespaceName,
                                   @PathVariable String branchName, @RequestBody GrayReleaseRuleDTO rules) {
-
-        namespaceBranchService
-                .updateBranchGrayRules(appId, Env.valueOf(env), clusterName, namespaceName, branchName, rules);
-
+        namespaceBranchService.updateBranchGrayRules(appId, Env.valueOf(env), clusterName, namespaceName, branchName, rules);
     }
 
 }

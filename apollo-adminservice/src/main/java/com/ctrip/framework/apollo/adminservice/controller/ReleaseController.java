@@ -90,7 +90,7 @@ public class ReleaseController {
      * @param appId App 编号
      * @param clusterName Cluster 名
      * @param namespaceName Namespace 名
-     * @param releaseName Release TODO
+     * @param releaseName Release 名字
      * @param releaseComment  发布描述
      * @param operator 发布人
      * @param isEmergencyPublish 是否紧急发布
@@ -117,7 +117,7 @@ public class ReleaseController {
         // 获得 Cluster 名
         Namespace parentNamespace = namespaceService.findParentNamespace(namespace);
         String messageCluster;
-        if (parentNamespace != null) { // 【TODO 6005】abtest
+        if (parentNamespace != null) {
             messageCluster = parentNamespace.getClusterName();
         } else {
             messageCluster = clusterName; // 使用请求的 ClusterName
