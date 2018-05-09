@@ -48,7 +48,6 @@ public class ReleaseController {
     public ReleaseDTO createRelease(@PathVariable String appId,
                                     @PathVariable String env, @PathVariable String clusterName,
                                     @PathVariable String namespaceName, @RequestBody NamespaceReleaseModel model) {
-
         // 校验 NamespaceReleaseModel 非空
         checkModel(Objects.nonNull(model));
         // 设置 PathVariable 变量到 NamespaceReleaseModel 中
@@ -77,14 +76,14 @@ public class ReleaseController {
         return createdRelease;
     }
 
+    //
     @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName)")
-    @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/releases",
-            method = RequestMethod.POST)
+    @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/releases", method = RequestMethod.POST)
     public ReleaseDTO createGrayRelease(@PathVariable String appId,
                                         @PathVariable String env, @PathVariable String clusterName,
                                         @PathVariable String namespaceName, @PathVariable String branchName,
                                         @RequestBody NamespaceReleaseModel model) {
-
+        // 校验 NamespaceReleaseModel 非空
         checkModel(Objects.nonNull(model));
         model.setAppId(appId);
         model.setEnv(env);

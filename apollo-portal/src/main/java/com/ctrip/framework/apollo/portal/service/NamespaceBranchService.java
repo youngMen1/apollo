@@ -73,42 +73,40 @@ public class NamespaceBranchService {
                 String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
     }
 
-
+    // 合并子 Namespace 变更的配置 Map 到父 Namespace ，并进行一次 Release
     public ReleaseDTO merge(String appId, Env env, String clusterName, String namespaceName,
                             String branchName, String title, String comment,
                             boolean isEmergencyPublish, boolean deleteBranch) {
-
+        // 计算变化的 Item 集合
         ItemChangeSets changeSets = calculateBranchChangeSet(appId, env, clusterName, namespaceName, branchName);
-
-        ReleaseDTO mergedResult =
-                releaseService.updateAndPublish(appId, env, clusterName, namespaceName, title, comment,
+        // 合并子 Namespace 变更的配置 Map 到父 Namespace ，并进行一次 Release
+        ReleaseDTO mergedResult = releaseService.updateAndPublish(appId, env, clusterName, namespaceName, title, comment,
                         branchName, isEmergencyPublish, deleteBranch, changeSets);
-
-        Tracer.logEvent(TracerEventType.MERGE_GRAY_RELEASE,
-                String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
-
+        // 【TODO 6001】Tracer 日志
+        Tracer.logEvent(TracerEventType.MERGE_GRAY_RELEASE, String.format("%s+%s+%s+%s", appId, env, clusterName, namespaceName));
         return mergedResult;
     }
 
-    private ItemChangeSets calculateBranchChangeSet(String appId, Env env, String clusterName, String namespaceName,
-                                                    String branchName) {
+    private ItemChangeSets calculateBranchChangeSet(String appId, Env env, String clusterName, String namespaceName, String branchName) {
+        // 获得父 NamespaceBO 对象
         NamespaceBO parentNamespace = namespaceService.loadNamespaceBO(appId, env, clusterName, namespaceName);
-
+        // 若父 Namespace 不存在，抛出 BadRequestException 异常。
         if (parentNamespace == null) {
             throw new BadRequestException("base namespace not existed");
         }
-
+        // 若父 Namespace 有配置项的变更，不允许合并。因为，可能存在冲突。
         if (parentNamespace.getItemModifiedCnt() > 0) {
             throw new BadRequestException("Merge operation failed. Because master has modified items");
         }
-
+        // 获得父 Namespace 的 Item 数组
         List<ItemDTO> masterItems = itemService.findItems(appId, env, clusterName, namespaceName);
-
+        // 获得子 Namespace 的 Item 数组
         List<ItemDTO> branchItems = itemService.findItems(appId, env, branchName, namespaceName);
-
-        ItemChangeSets changeSets = itemsComparator.compareIgnoreBlankAndCommentItem(parentNamespace.getBaseInfo().getId(),
-                masterItems, branchItems);
+        // 计算变化的 Item 集合
+        ItemChangeSets changeSets = itemsComparator.compareIgnoreBlankAndCommentItem(parentNamespace.getBaseInfo().getId(), masterItems, branchItems);
+        // 设置 `ItemChangeSets.deleteItem` 为空。因为子 Namespace 从父 Namespace 继承配置，但是实际自己没有那些配置项，所以如果不清空，会导致这些配置项被删除。
         changeSets.setDeleteItems(Collections.emptyList());
+        // 设置 `ItemChangeSets.dataChangeLastModifiedBy` 为当前管理员
         changeSets.setDataChangeLastModifiedBy(userInfoHolder.getUser().getUserId());
         return changeSets;
     }

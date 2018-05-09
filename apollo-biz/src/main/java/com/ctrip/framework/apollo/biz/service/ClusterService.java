@@ -78,20 +78,24 @@ public class ClusterService {
         return cluster;
     }
 
+    // 删除 Cluster
     @Transactional
     public void delete(long id, String operator) {
+        // 获得 Cluster 对象
         Cluster cluster = clusterRepository.findOne(id);
         if (cluster == null) {
             throw new BadRequestException("cluster not exist");
         }
-
-        //delete linked namespaces
+        // 删除 Namespace
+        // delete linked namespaces
         namespaceService.deleteByAppIdAndClusterName(cluster.getAppId(), cluster.getName(), operator);
 
+        // 标记删除 Cluster
         cluster.setDeleted(true);
         cluster.setDataChangeLastModifiedBy(operator);
         clusterRepository.save(cluster);
 
+        // 【TODO 6002】Audit
         auditService.audit(Cluster.class.getSimpleName(), id, Audit.OP.DELETE, operator);
     }
 

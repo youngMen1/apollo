@@ -124,7 +124,6 @@ public class ReleaseController {
         }
         // 发送 Release 消息
         messageSender.sendMessage(ReleaseMessageKeyGenerator.generate(appId, messageCluster, namespaceName), Topics.APOLLO_RELEASE_TOPIC);
-
         // 将 Release 转换成 ReleaseDTO 对象
         return BeanUtils.transfrom(ReleaseDTO.class, release);
     }
@@ -141,29 +140,25 @@ public class ReleaseController {
                                        @PathVariable("namespaceName") String namespaceName,
                                        @RequestParam("releaseName") String releaseName,
                                        @RequestParam("branchName") String branchName,
-                                       @RequestParam(value = "deleteBranch", defaultValue = "true") boolean deleteBranch,
+                                       @RequestParam(value = "deleteBranch", defaultValue = "true") boolean deleteBranch, // 是否删除 Namespace 分支
                                        @RequestParam(name = "releaseComment", required = false) String releaseComment,
                                        @RequestParam(name = "isEmergencyPublish", defaultValue = "false") boolean isEmergencyPublish,
                                        @RequestBody ItemChangeSets changeSets) {
+        // 获得 Namespace
         Namespace namespace = namespaceService.findOne(appId, clusterName, namespaceName);
         if (namespace == null) {
-            throw new NotFoundException(String.format("Could not find namespace for %s %s %s", appId,
-                    clusterName, namespaceName));
+            throw new NotFoundException(String.format("Could not find namespace for %s %s %s", appId, clusterName, namespaceName));
         }
-
-        Release release = releaseService.mergeBranchChangeSetsAndRelease(namespace, branchName, releaseName,
-                releaseComment, isEmergencyPublish, changeSets);
-
+        // 合并子 Namespace 变更的配置 Map 到父 Namespace ，并进行一次 Release
+        Release release = releaseService.mergeBranchChangeSetsAndRelease(namespace, branchName, releaseName, releaseComment, isEmergencyPublish, changeSets);
+        // 若需要删除子 Namespace ，则进行删除
         if (deleteBranch) {
-            namespaceBranchService.deleteBranch(appId, clusterName, namespaceName, branchName,
-                    NamespaceBranchStatus.MERGED, changeSets.getDataChangeLastModifiedBy());
+            namespaceBranchService.deleteBranch(appId, clusterName, namespaceName, branchName, NamespaceBranchStatus.MERGED, changeSets.getDataChangeLastModifiedBy());
         }
-
-        messageSender.sendMessage(ReleaseMessageKeyGenerator.generate(appId, clusterName, namespaceName),
-                Topics.APOLLO_RELEASE_TOPIC);
-
+        // 发送 Release 消息
+        messageSender.sendMessage(ReleaseMessageKeyGenerator.generate(appId, clusterName, namespaceName), Topics.APOLLO_RELEASE_TOPIC);
+        // 将 Release 转换成 ReleaseDTO 对象
         return BeanUtils.transfrom(ReleaseDTO.class, release);
-
     }
 
     @Transactional

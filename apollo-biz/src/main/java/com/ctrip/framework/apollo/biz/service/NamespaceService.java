@@ -246,13 +246,9 @@ public class NamespaceService {
 
     @Transactional
     public void deleteByAppIdAndClusterName(String appId, String clusterName, String operator) {
-
         List<Namespace> toDeleteNamespaces = findNamespaces(appId, clusterName);
-
         for (Namespace namespace : toDeleteNamespaces) {
-
             deleteNamespace(namespace, operator);
-
         }
     }
 

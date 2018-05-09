@@ -182,19 +182,24 @@ public class NamespaceService {
     }
 
     private NamespaceBO transformNamespace2BO(Env env, NamespaceDTO namespace) {
+        // 创建 NamespaceBO 对象
         NamespaceBO namespaceBO = new NamespaceBO();
+        // 设置 `baseInfo` 属性
         namespaceBO.setBaseInfo(namespace);
 
         String appId = namespace.getAppId();
         String clusterName = namespace.getClusterName();
         String namespaceName = namespace.getNamespaceName();
 
+        // 填充 NamespaceBO 对象的基础属性
         fillAppNamespaceProperties(namespaceBO);
 
         List<ItemBO> itemBOs = new LinkedList<>();
         namespaceBO.setItems(itemBOs);
+        int modifiedItemCnt = 0;
 
-        //latest Release
+        // 获得最新的已经发布的 Release 的配置 Map
+        // latest Release
         ReleaseDTO latestRelease;
         Map<String, String> releaseItems = new HashMap<>();
         latestRelease = releaseService.loadLatestRelease(appId, env, clusterName, namespaceName);
@@ -202,41 +207,47 @@ public class NamespaceService {
             releaseItems = gson.fromJson(latestRelease.getConfigurations(), GsonType.CONFIG);
         }
 
-        //not Release config items
+        // 获得 Namespace 所有的 Item 数组
+        // not Release config items
         List<ItemDTO> items = itemService.findItems(appId, env, clusterName, namespaceName);
-        int modifiedItemCnt = 0;
+
+        // 添加新增或更新的 ItemBO 到 `itemBOs` 中
         for (ItemDTO itemDTO : items) {
-
+            // 创建 ItemBO 对象
             ItemBO itemBO = transformItem2BO(itemDTO, releaseItems);
-
+            // 若有修改，计数增加
             if (itemBO.isModified()) {
                 modifiedItemCnt++;
             }
-
+            // 添加到 `itemBOs`
             itemBOs.add(itemBO);
         }
 
-        //deleted items
+        // 添加已删除的 ItemBO 到 `itemBOs` 中
+        // deleted items
+        // 计算已经删除的 ItemBO 数组
         List<ItemBO> deletedItems = parseDeletedItems(items, releaseItems);
+        // 添加到 `itemBOs`
         itemBOs.addAll(deletedItems);
+        // 若有删除，计数增加
         modifiedItemCnt += deletedItems.size();
 
+        // 设置 `itemModifiedCnt` 属性
         namespaceBO.setItemModifiedCnt(modifiedItemCnt);
-
         return namespaceBO;
     }
 
+    // 填充 NamespaceBO 对象的基础属性
     private void fillAppNamespaceProperties(NamespaceBO namespace) {
-
         NamespaceDTO namespaceDTO = namespace.getBaseInfo();
-        //先从当前appId下面找,包含私有的和公共的
-        AppNamespace appNamespace =
-                appNamespaceService.findByAppIdAndName(namespaceDTO.getAppId(), namespaceDTO.getNamespaceName());
-        //再从公共的app namespace里面找
+        // 先从当前 appId 下面找,包含私有的和公共的
+        AppNamespace appNamespace = appNamespaceService.findByAppIdAndName(namespaceDTO.getAppId(), namespaceDTO.getNamespaceName());
+        // 再从公共的 app namespace 里面找
         if (appNamespace == null) {
             appNamespace = appNamespaceService.findPublicAppNamespace(namespaceDTO.getNamespaceName());
         }
 
+        // 设置 `format` `public` `parentAppId` `comment` 属性到 NamespaceBO 对象
         String format;
         boolean isPublic;
         if (appNamespace == null) {
@@ -252,39 +263,45 @@ public class NamespaceService {
         namespace.setPublic(isPublic);
     }
 
+    // 对比两个集合，计算从 releaseItems 中删除了的配置结果数组
     private List<ItemBO> parseDeletedItems(List<ItemDTO> newItems, Map<String, String> releaseItems) {
+        // 创建新的配置项 Map
         Map<String, ItemDTO> newItemMap = BeanUtils.mapByKey("key", newItems);
-
+        // 创建，已删除的 ItemBO 数组
         List<ItemBO> deletedItems = new LinkedList<>();
+        // 循环已发布的配置 Map ，对比哪些配置被删除了
         for (Map.Entry<String, String> entry : releaseItems.entrySet()) {
             String key = entry.getKey();
-            if (newItemMap.get(key) == null) {
-                ItemBO deletedItem = new ItemBO();
-
-                deletedItem.setDeleted(true);
+            if (newItemMap.get(key) == null) { // 已删除
+                // 创建 ItemDTO 对象
                 ItemDTO deletedItemDto = new ItemDTO();
                 deletedItemDto.setKey(key);
                 String oldValue = entry.getValue();
-                deletedItem.setItem(deletedItemDto);
-
                 deletedItemDto.setValue(oldValue);
+                // 创建 ItemBO 对象
+                ItemBO deletedItem = new ItemBO();
+                deletedItem.setItem(deletedItemDto);
+                deletedItem.setDeleted(true);
                 deletedItem.setModified(true);
                 deletedItem.setOldValue(oldValue);
                 deletedItem.setNewValue("");
+                // 添加到 `deletedItems` 中
                 deletedItems.add(deletedItem);
             }
         }
+        // 返回，已删除的 ItemBO 数组
         return deletedItems;
     }
 
     private ItemBO transformItem2BO(ItemDTO itemDTO, Map<String, String> releaseItems) {
         String key = itemDTO.getKey();
+        // 创建 ItemBO 对象
         ItemBO itemBO = new ItemBO();
         itemBO.setItem(itemDTO);
         String newValue = itemDTO.getValue();
         String oldValue = releaseItems.get(key);
-        //new item or modified
-        if (!StringUtils.isEmpty(key) && (oldValue == null || !newValue.equals(oldValue))) {
+        // new item or modified
+        if (!StringUtils.isEmpty(key) && (!newValue.equals(oldValue))) {
             itemBO.setModified(true);
             itemBO.setOldValue(oldValue == null ? "" : oldValue);
             itemBO.setNewValue(newValue);

@@ -76,22 +76,23 @@ public class NamespaceBranchController {
 
     }
 
-
+    // 灰度全量发布
     @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName)")
     @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/merge", method = RequestMethod.POST)
     public ReleaseDTO merge(@PathVariable String appId, @PathVariable String env,
                             @PathVariable String clusterName, @PathVariable String namespaceName,
                             @PathVariable String branchName, @RequestParam(value = "deleteBranch", defaultValue = "true") boolean deleteBranch,
                             @RequestBody NamespaceReleaseModel model) {
-
+        // 若是紧急发布，但是当前环境未允许该操作，抛出 BadRequestException 异常
         if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.fromString(env))) {
             throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
         }
-
+        // 合并子 Namespace 变更的配置 Map 到父 Namespace ，并进行一次 Release
         ReleaseDTO createdRelease = namespaceBranchService.merge(appId, Env.valueOf(env), clusterName, namespaceName, branchName,
                 model.getReleaseTitle(), model.getReleaseComment(),
                 model.isEmergencyPublish(), deleteBranch);
 
+        // 创建 ConfigPublishEvent 对象
         ConfigPublishEvent event = ConfigPublishEvent.instance();
         event.withAppId(appId)
                 .withCluster(clusterName)
@@ -99,12 +100,10 @@ public class NamespaceBranchController {
                 .withReleaseId(createdRelease.getId())
                 .setMergeEvent(true)
                 .setEnv(Env.valueOf(env));
-
+        // 发布 ConfigPublishEvent 事件
         publisher.publishEvent(event);
-
         return createdRelease;
     }
-
 
     @RequestMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/rules", method = RequestMethod.GET)
     public GrayReleaseRuleDTO getBranchGrayRules(@PathVariable String appId, @PathVariable String env,

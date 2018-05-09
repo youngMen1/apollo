@@ -61,9 +61,9 @@ public abstract class AbstractConfigService implements ConfigService {
      */
     private Release findRelease(String clientAppId, String clientIp, String configAppId, String configClusterName,
                                 String configNamespace, ApolloNotificationMessages clientMessages) {
-        // 【TODO 6005】AB TEST
+        // 读取灰度发布编号
         Long grayReleaseId = grayReleaseRulesHolder.findReleaseIdFromGrayReleaseRule(clientAppId, clientIp, configAppId, configClusterName, configNamespace);
-        // 【TODO 6005】AB TEST
+        // 读取灰度 Release 对象
         Release release = null;
         if (grayReleaseId != null) {
             release = findActiveOne(grayReleaseId, clientMessages);
