@@ -66,7 +66,7 @@ public class AppService {
         // 保护代码，避免 App 对象中，已经有 id 属性。
         entity.setId(0); // protection
         App app = appRepository.save(entity);
-        // 【TODO 6002】Audit
+        // 记录 Audit 到数据库中
         auditService.audit(App.class.getSimpleName(), app.getId(), Audit.OP.INSERT, app.getDataChangeCreatedBy());
         return app;
     }

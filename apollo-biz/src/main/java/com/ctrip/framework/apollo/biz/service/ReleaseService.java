@@ -345,7 +345,7 @@ public class ReleaseService {
         release = releaseRepository.save(release);
         // 释放 NamespaceLock
         namespaceLockService.unlock(namespace.getId());
-        // 【TODO 6002】audit
+        // 记录 Audit 到数据库中
         auditService.audit(Release.class.getSimpleName(), release.getId(), Audit.OP.INSERT, release.getDataChangeCreatedBy());
         return release;
     }

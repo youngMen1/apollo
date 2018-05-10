@@ -8,25 +8,40 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 操作审计日志
+ */
 @Entity
 @Table(name = "Audit")
 @SQLDelete(sql = "Update Audit set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
 public class Audit extends BaseEntity {
 
+    /**
+     * 操作枚举
+     */
     public enum OP {
         INSERT, UPDATE, DELETE
     }
 
+    /**
+     * 实体名
+     */
     @Column(name = "EntityName", nullable = false)
     private String entityName;
-
+    /**
+     * 实体编号
+     */
     @Column(name = "EntityId")
     private Long entityId;
-
+    /**
+     * 操作名
+     */
     @Column(name = "OpName", nullable = false)
     private String opName;
-
+    /**
+     * 备注
+     */
     @Column(name = "Comment")
     private String comment;
 

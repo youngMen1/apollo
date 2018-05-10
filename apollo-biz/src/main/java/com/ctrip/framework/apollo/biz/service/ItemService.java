@@ -135,7 +135,7 @@ public class ItemService {
         }
         // 保存 Item
         Item item = itemRepository.save(entity);
-        // 【TODO 6002】Audit
+        // 记录 Audit 到数据库中
         auditService.audit(Item.class.getSimpleName(), item.getId(), Audit.OP.INSERT, item.getDataChangeCreatedBy());
         return item;
     }

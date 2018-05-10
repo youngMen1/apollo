@@ -66,7 +66,7 @@ public class ReleaseHistoryService {
         releaseHistory.setDataChangeLastModifiedBy(operator);
         // 保存 ReleaseHistory 对象
         releaseHistoryRepository.save(releaseHistory);
-        // 【TODO 6002】audit
+        // 记录 Audit 到数据库中
         auditService.audit(ReleaseHistory.class.getSimpleName(), releaseHistory.getId(), Audit.OP.INSERT, releaseHistory.getDataChangeCreatedBy());
         return releaseHistory;
     }

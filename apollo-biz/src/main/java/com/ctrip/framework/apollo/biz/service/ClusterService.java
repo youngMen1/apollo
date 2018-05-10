@@ -95,7 +95,7 @@ public class ClusterService {
         cluster.setDataChangeLastModifiedBy(operator);
         clusterRepository.save(cluster);
 
-        // 【TODO 6002】Audit
+        // 记录 Audit 到数据库中
         auditService.audit(Cluster.class.getSimpleName(), id, Audit.OP.DELETE, operator);
     }
 

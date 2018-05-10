@@ -170,7 +170,7 @@ public class NamespaceBranchService {
         int releaseOperation = branchStatus == NamespaceBranchStatus.MERGED ? ReleaseOperation.GRAY_RELEASE_DELETED_AFTER_MERGE : ReleaseOperation.ABANDON_GRAY_RELEASE;
         releaseHistoryService.createReleaseHistory(appId, clusterName, namespaceName, branchName, latestBranchReleaseId, latestBranchReleaseId,
                 releaseOperation, null, operator);
-        // 【TODO 6002】Audit
+        // 记录 Audit 到数据库中
         auditService.audit("Branch", toDeleteCluster.getId(), Audit.OP.DELETE, operator);
     }
 

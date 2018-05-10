@@ -283,6 +283,7 @@ public class NamespaceService {
         namespace.setDeleted(true);
         namespace.setDataChangeLastModifiedBy(operator);
 
+        // 记录 Audit 到数据库中
         auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.DELETE, operator);
 
         Namespace deleted = namespaceRepository.save(namespace);
@@ -304,7 +305,7 @@ public class NamespaceService {
         entity.setId(0);//protection
         // 保存 Namespace 到数据库
         Namespace namespace = namespaceRepository.save(entity);
-        // 【TODO 6002】Audit
+        /// 记录 Audit 到数据库中
         auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.INSERT, namespace.getDataChangeCreatedBy());
         return namespace;
     }
@@ -335,7 +336,7 @@ public class NamespaceService {
             ns.setDataChangeCreatedBy(createBy);
             ns.setDataChangeLastModifiedBy(createBy);
             namespaceRepository.save(ns);
-            // 【TODO 6002】Audit
+            // 记录 Audit 到数据库中
             auditService.audit(Namespace.class.getSimpleName(), ns.getId(), Audit.OP.INSERT, createBy);
         }
     }

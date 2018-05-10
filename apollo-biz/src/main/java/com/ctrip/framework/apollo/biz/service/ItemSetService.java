@@ -48,7 +48,7 @@ public class ItemSetService {
                 // 添加到 ConfigChangeContentBuilder 中
                 configChangeContentBuilder.createItem(createdItem);
             }
-            // 【TODO 6002】Audit
+            // 记录 Audit 到数据库中
             auditService.audit("ItemSet", null, Audit.OP.INSERT, operator);
         }
         // 更新 Item 们
@@ -70,7 +70,7 @@ public class ItemSetService {
                 // 添加到 ConfigChangeContentBuilder 中
                 configChangeContentBuilder.updateItem(beforeUpdateItem, updatedItem);
             }
-            // 【TODO 6002】Audit
+            // 记录 Audit 到数据库中
             auditService.audit("ItemSet", null, Audit.OP.UPDATE, operator);
         }
         // 删除 Item 们
@@ -81,7 +81,7 @@ public class ItemSetService {
                 // 添加到 ConfigChangeContentBuilder 中
                 configChangeContentBuilder.deleteItem(deletedItem);
             }
-            // 【TODO 6002】Audit
+            // 记录 Audit 到数据库中
             auditService.audit("ItemSet", null, Audit.OP.DELETE, operator);
         }
         // 创建 Commit 对象，并保存

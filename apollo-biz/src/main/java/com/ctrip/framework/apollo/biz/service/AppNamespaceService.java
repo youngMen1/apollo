@@ -106,7 +106,7 @@ public class AppNamespaceService {
         appNamespace = appNamespaceRepository.save(appNamespace);
         // 创建 AppNamespace 在 App 下，每个 Cluster 的 Namespace 对象。
         instanceOfAppNamespaceInAllCluster(appNamespace.getAppId(), appNamespace.getName(), createBy);
-        // 【TODO 6002】Audit
+        // 记录 Audit 到数据库中
         auditService.audit(AppNamespace.class.getSimpleName(), appNamespace.getId(), Audit.OP.INSERT, createBy);
         return appNamespace;
     }
