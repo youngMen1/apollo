@@ -30,9 +30,8 @@ public class BizConfig extends RefreshableConfig {
     private static final int DEFAULT_RELEASE_MESSAGE_NOTIFICATION_BATCH_INTERVAL_IN_MILLI = 100;//100ms
 
     private Gson gson = new Gson();
-    private static final Type namespaceValueLengthOverrideTypeReference =
-            new TypeToken<Map<Long, Integer>>() {
-            }.getType();
+
+    private static final Type namespaceValueLengthOverrideTypeReference = new TypeToken<Map<Long, Integer>>() {}.getType();
 
     @Autowired
     private BizDBPropertySource propertySource;
@@ -42,12 +41,14 @@ public class BizConfig extends RefreshableConfig {
         return Collections.singletonList(propertySource);
     }
 
+    // 获得 Eureka 服务器地址的数组
     public List<String> eurekaServiceUrls() {
+        // 获得配置值
         String configuration = getValue("eureka.service.url", "");
+        // 分隔成 List
         if (Strings.isNullOrEmpty(configuration)) {
             return Collections.emptyList();
         }
-
         return splitter.splitToList(configuration);
     }
 
@@ -72,7 +73,6 @@ public class BizConfig extends RefreshableConfig {
         if (!Strings.isNullOrEmpty(namespaceValueLengthOverrideString)) {
             namespaceValueLengthOverride = gson.fromJson(namespaceValueLengthOverrideString, namespaceValueLengthOverrideTypeReference);
         }
-
         return namespaceValueLengthOverride;
     }
 
@@ -143,4 +143,5 @@ public class BizConfig extends RefreshableConfig {
         }
         return defaultValue;
     }
+
 }
