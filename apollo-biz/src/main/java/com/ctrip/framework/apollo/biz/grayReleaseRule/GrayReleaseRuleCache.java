@@ -12,12 +12,19 @@ import java.util.Set;
 public class GrayReleaseRuleCache {
 
     private long ruleId;
-    private String branchName;
+
+    // 缺少 appId
+    // 缺少 clusterName
+
     private String namespaceName;
-    private long releaseId;
-    private long loadVersion;
-    private int branchStatus;
+    private String branchName;
     private Set<GrayReleaseRuleItemDTO> ruleItems;
+    private long releaseId;
+    private int branchStatus;
+    /**
+     * 加载版本
+     */
+    private long loadVersion;
 
     public GrayReleaseRuleCache(long ruleId, String branchName, String namespaceName, long
             releaseId, int branchStatus, long loadVersion, Set<GrayReleaseRuleItemDTO> ruleItems) {
@@ -28,6 +35,16 @@ public class GrayReleaseRuleCache {
         this.branchStatus = branchStatus;
         this.loadVersion = loadVersion;
         this.ruleItems = ruleItems;
+    }
+
+    // 匹配 clientAppId + clientIp
+    public boolean matches(String clientAppId, String clientIp) {
+        for (GrayReleaseRuleItemDTO ruleItem : ruleItems) {
+            if (ruleItem.matches(clientAppId, clientIp)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public long getRuleId() {
@@ -60,15 +77,6 @@ public class GrayReleaseRuleCache {
 
     public String getNamespaceName() {
         return namespaceName;
-    }
-
-    public boolean matches(String clientAppId, String clientIp) {
-        for (GrayReleaseRuleItemDTO ruleItem : ruleItems) {
-            if (ruleItem.matches(clientAppId, clientIp)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

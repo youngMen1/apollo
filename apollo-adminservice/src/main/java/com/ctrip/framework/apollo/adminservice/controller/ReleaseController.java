@@ -117,7 +117,7 @@ public class ReleaseController {
         // 获得 Cluster 名
         Namespace parentNamespace = namespaceService.findParentNamespace(namespace);
         String messageCluster;
-        if (parentNamespace != null) {
+        if (parentNamespace != null) { //  有父 Namespace ，说明是灰度发布，使用父 Namespace 的集群名
             messageCluster = parentNamespace.getClusterName();
         } else {
             messageCluster = clusterName; // 使用请求的 ClusterName

@@ -125,13 +125,13 @@ public class NamespaceUnlockAspect {
 
     private Map<String, String> generateConfigurationFromItems(Namespace namespace, List<Item> namespaceItems) {
         Map<String, String> configurationFromItems = Maps.newHashMap();
-        //【TODO 6005】abtest
+        // 获得父 Namespace 对象
         Namespace parentNamespace = namespaceService.findParentNamespace(namespace);
-        // 若无父 Namespace ，使用
+        // 若无父 Namespace ，使用自己的配置
         // parent namespace
         if (parentNamespace == null) {
             generateMapFromItems(namespaceItems, configurationFromItems);
-            //【TODO 6005】abtest
+        // 若有父 Namespace ，说明是灰度发布，合并父 Namespace 的配置 + 自己的配置项
         } else { //child namespace
             Release parentRelease = releaseService.findLatestActiveRelease(parentNamespace);
             if (parentRelease != null) {
