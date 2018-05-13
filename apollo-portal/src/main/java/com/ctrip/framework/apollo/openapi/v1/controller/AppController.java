@@ -6,7 +6,6 @@ import com.ctrip.framework.apollo.core.enums.Env;
 import com.ctrip.framework.apollo.openapi.dto.OpenEnvClusterDTO;
 import com.ctrip.framework.apollo.portal.component.PortalSettings;
 import com.ctrip.framework.apollo.portal.service.ClusterService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,29 +19,29 @@ import java.util.List;
 @RequestMapping("/openapi/v1")
 public class AppController {
 
-  @Autowired
-  private PortalSettings portalSettings;
-  @Autowired
-  private ClusterService clusterService;
+    @Autowired
+    private PortalSettings portalSettings;
+    @Autowired
+    private ClusterService clusterService;
 
-  @RequestMapping(value = "/apps/{appId}/envclusters", method = RequestMethod.GET)
-  public List<OpenEnvClusterDTO> loadEnvClusterInfo(@PathVariable String appId){
+    @RequestMapping(value = "/apps/{appId}/envclusters", method = RequestMethod.GET)
+    public List<OpenEnvClusterDTO> loadEnvClusterInfo(@PathVariable String appId) {
 
-    List<OpenEnvClusterDTO> envClusters = new LinkedList<>();
+        List<OpenEnvClusterDTO> envClusters = new LinkedList<>();
 
-    List<Env> envs = portalSettings.getActiveEnvs();
-    for (Env env : envs) {
-      OpenEnvClusterDTO envCluster = new OpenEnvClusterDTO();
+        List<Env> envs = portalSettings.getActiveEnvs();
+        for (Env env : envs) {
+            OpenEnvClusterDTO envCluster = new OpenEnvClusterDTO();
 
-      envCluster.setEnv(env.name());
-      List<ClusterDTO> clusterDTOs = clusterService.findClusters(env, appId);
-      envCluster.setClusters(BeanUtils.toPropertySet("name", clusterDTOs));
+            envCluster.setEnv(env.name());
+            List<ClusterDTO> clusterDTOs = clusterService.findClusters(env, appId);
+            envCluster.setClusters(BeanUtils.toPropertySet("name", clusterDTOs));
 
-      envClusters.add(envCluster);
+            envClusters.add(envCluster);
+        }
+
+        return envClusters;
+
     }
-
-    return envClusters;
-
-  }
 
 }

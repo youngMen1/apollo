@@ -114,7 +114,7 @@ public class AppNamespaceService {
         }
         // 保存 AppNamespace 到数据库
         AppNamespace createdAppNamespace = appNamespaceRepository.save(appNamespace);
-        // 【TODO 6000】Portal 权限系统
+        // 初始化 Namespace 的 Role 们
         roleInitializationService.initNamespaceRoles(appNamespace.getAppId(), appNamespace.getName(), operator);
         return createdAppNamespace;
     }

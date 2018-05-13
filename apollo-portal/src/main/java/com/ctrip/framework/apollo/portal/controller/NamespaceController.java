@@ -88,10 +88,10 @@ public class NamespaceController {
 
     /**
      * 创建 Namespace
-     *
+     * <p>
      * ps：关联 Namespace 也调用该接口
      *
-     * @param appId App 编号
+     * @param appId  App 编号
      * @param models NamespaceCreationModel 数组
      * @return 成功
      */
@@ -101,7 +101,7 @@ public class NamespaceController {
                                                 @RequestBody List<NamespaceCreationModel> models) {
         // 校验 `models` 非空
         checkModel(!CollectionUtils.isEmpty(models));
-        // 【TODO 6000】Portal 权限系统
+        // 初始化 Namespace 的 Role 们。
         String namespaceName = models.get(0).getNamespace().getNamespaceName();
         String operator = userInfoHolder.getUser().getUserId();
         roleInitializationService.initNamespaceRoles(appId, namespaceName, operator);
@@ -118,7 +118,7 @@ public class NamespaceController {
                 Tracer.logError(String.format("create namespace fail. (env=%s namespace=%s)", model.getEnv(), namespace.getNamespaceName()), e);
             }
         }
-        // 【TODO 6000】Portal 权限系统
+        // 授予 Namespace Role 给当前管理员
         assignNamespaceRoleToOperator(appId, namespaceName);
         return ResponseEntity.ok().build();
     }
@@ -136,7 +136,7 @@ public class NamespaceController {
     /**
      * 创建 AppNamespace
      *
-     * @param appId App 编号
+     * @param appId        App 编号
      * @param appNamespace AppNamespace
      * @return 创建的 AppNamespace
      */
@@ -157,7 +157,7 @@ public class NamespaceController {
         // 1. 公开类型的 AppNamespace 。
         // 2. 私有类型的 AppNamespace ，并且允许 App 管理员创建私有类型的 AppNamespace 。
         if (portalConfig.canAppAdminCreatePrivateNamespace() || createdAppNamespace.isPublic()) {
-            // 【TODO 6000】Portal 权限系统
+            //  授予 Namespace Role
             assignNamespaceRoleToOperator(appId, appNamespace.getName());
         }
         // 发布 AppNamespaceCreationEvent 创建事件
@@ -189,14 +189,11 @@ public class NamespaceController {
     }
 
     private void assignNamespaceRoleToOperator(String appId, String namespaceName) {
-        //default assign modify、release namespace role to namespace creator
+        // default assign modify、release namespace role to namespace creator
         String operator = userInfoHolder.getUser().getUserId();
-
-        rolePermissionService
-                .assignRoleToUsers(RoleUtils.buildNamespaceRoleName(appId, namespaceName, RoleType.MODIFY_NAMESPACE),
-                        Sets.newHashSet(operator), operator);
-        rolePermissionService
-                .assignRoleToUsers(RoleUtils.buildNamespaceRoleName(appId, namespaceName, RoleType.RELEASE_NAMESPACE),
-                        Sets.newHashSet(operator), operator);
+        // 授予 Namespace 修改和发布的 Role 给管理员
+        rolePermissionService.assignRoleToUsers(RoleUtils.buildNamespaceRoleName(appId, namespaceName, RoleType.MODIFY_NAMESPACE), Sets.newHashSet(operator), operator);
+        rolePermissionService.assignRoleToUsers(RoleUtils.buildNamespaceRoleName(appId, namespaceName, RoleType.RELEASE_NAMESPACE), Sets.newHashSet(operator), operator);
     }
+
 }

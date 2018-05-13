@@ -1,7 +1,6 @@
 package com.ctrip.framework.apollo.portal.controller;
 
 import com.ctrip.framework.apollo.portal.spi.SsoHeartbeatHandler;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/sso_heartbeat")
 public class SsoHeartbeatController {
 
-  @Autowired
-  private SsoHeartbeatHandler handler;
+    @Autowired
+    private SsoHeartbeatHandler handler;
 
-  @RequestMapping(value = "", method = RequestMethod.GET)
-  public void heartbeat(HttpServletRequest request, HttpServletResponse response) {
-    handler.doHeartbeat(request, response);
-  }
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public void heartbeat(HttpServletRequest request, HttpServletResponse response) {
+        handler.doHeartbeat(request, response);
+    }
 
 }

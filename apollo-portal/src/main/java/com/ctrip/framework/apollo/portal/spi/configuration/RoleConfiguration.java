@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Role 配置
+ *
  * @author Timothy Liu(timothy.liu@cvte.com)
  */
 @Configuration

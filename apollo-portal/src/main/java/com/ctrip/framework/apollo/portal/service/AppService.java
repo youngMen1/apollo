@@ -99,7 +99,7 @@ public class AppService {
         App createdApp = appRepository.save(app);
         // 创建 App 的默认命名空间 "application"
         appNamespaceService.createDefaultAppNamespace(appId);
-        // 【TODO 6000】Portal 权限系统
+        // 初始化 App 角色
         roleInitializationService.initAppRoles(createdApp);
         // 【TODO 6001】Tracer 日志
         Tracer.logEvent(TracerEventType.CREATE_APP, appId);

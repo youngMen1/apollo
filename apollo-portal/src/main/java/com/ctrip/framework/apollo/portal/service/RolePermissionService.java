@@ -7,53 +7,56 @@ import com.ctrip.framework.apollo.portal.entity.po.Role;
 import java.util.Set;
 
 /**
+ * RolePermissionService 接口，提供 Role、UserRole、Permission、UserPermission 相关的操作
+ *
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface RolePermissionService {
 
-  /**
-   * Create role with permissions, note that role name should be unique
-   */
-  public Role createRoleWithPermissions(Role role, Set<Long> permissionIds);
+    // ========== Role 相关 ==========
+    /**
+     * Create role with permissions, note that role name should be unique
+     */
+    Role createRoleWithPermissions(Role role, Set<Long> permissionIds);
+    /**
+     * Find role by role name, note that roleName should be unique
+     */
+    Role findRoleByRoleName(String roleName);
 
-  /**
-   * Assign role to users
-   *
-   * @return the users assigned roles
-   */
-  public Set<String> assignRoleToUsers(String roleName, Set<String> userIds,
-                                       String operatorUserId);
+    // ========== UserRole 相关 ==========
+    /**
+     * Assign role to users
+     *
+     * @return the users assigned roles
+     */
+    Set<String> assignRoleToUsers(String roleName, Set<String> userIds, String operatorUserId);
+    /**
+     * Remove role from users
+     */
+    void removeRoleFromUsers(String roleName, Set<String> userIds, String operatorUserId);
+    /**
+     * Query users with role
+     */
+    Set<UserInfo> queryUsersWithRole(String roleName);
 
-  /**
-   * Remove role from users
-   */
-  public void removeRoleFromUsers(String roleName, Set<String> userIds, String operatorUserId);
+    // ========== UserPermission 相关 ==========
+    /**
+     * Check whether user has the permission
+     */
+    boolean userHasPermission(String userId, String permissionType, String targetId);
+    /**
+     * 校验是否为超级管理员
+     */
+    boolean isSuperAdmin(String userId);
 
-  /**
-   * Query users with role
-   */
-  public Set<UserInfo> queryUsersWithRole(String roleName);
-
-  /**
-   * Find role by role name, note that roleName should be unique
-   */
-  public Role findRoleByRoleName(String roleName);
-
-  /**
-   * Check whether user has the permission
-   */
-  public boolean userHasPermission(String userId, String permissionType, String targetId);
-
-  public boolean isSuperAdmin(String userId);
-
-  /**
-   * Create permission, note that permissionType + targetId should be unique
-   */
-  public Permission createPermission(Permission permission);
-
-  /**
-   * Create permissions, note that permissionType + targetId should be unique
-   */
-  public Set<Permission> createPermissions(Set<Permission> permissions);
+    // ========== Permission 相关 ==========
+    /**
+     * Create permission, note that permissionType + targetId should be unique
+     */
+    Permission createPermission(Permission permission);
+    /**
+     * Create permissions, note that permissionType + targetId should be unique
+     */
+    Set<Permission> createPermissions(Set<Permission> permissions);
 
 }

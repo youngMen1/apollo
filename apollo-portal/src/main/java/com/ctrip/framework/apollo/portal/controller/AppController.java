@@ -82,7 +82,7 @@ public class AppController {
         App createdApp = appService.createAppInLocal(app);
         // 发布 AppCreationEvent 创建事件
         publisher.publishEvent(new AppCreationEvent(createdApp));
-        // 【TODO 6000】Portal 权限系统
+        // 授予 App 管理员的角色
         Set<String> admins = appModel.getAdmins();
         if (!CollectionUtils.isEmpty(admins)) {
             rolePermissionService.assignRoleToUsers(RoleUtils.buildAppMasterRoleName(createdApp.getAppId()),

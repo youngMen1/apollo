@@ -1,7 +1,6 @@
 package com.ctrip.framework.apollo.portal.entity.po;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -20,15 +19,18 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class Role extends BaseEntity {
 
-  @Column(name = "RoleName", nullable = false)
-  private String roleName;
+    /**
+     * 角色名
+     */
+    @Column(name = "RoleName", nullable = false)
+    private String roleName;
 
-  public String getRoleName() {
-    return roleName;
-  }
+    public String getRoleName() {
+        return roleName;
+    }
 
-  public void setRoleName(String roleName) {
-    this.roleName = roleName;
-  }
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
 }
