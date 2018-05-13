@@ -29,63 +29,58 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @ControllerAdvice
 public class GlobalDefaultExceptionHandler {
+
     private Gson gson = new Gson();
-    private static Type mapType = new TypeToken<Map<String, Object>>() {
-    }.getType();
+    private static Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 
-    //处理系统内置的Exception
+    // 处理系统内置的 Exception
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<Map<String, Object>> exception(HttpServletRequest request, Throwable ex) {
-        return handleError(request, INTERNAL_SERVER_ERROR, ex);
+        return handleError(request, INTERNAL_SERVER_ERROR, ex); // 500
     }
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class, HttpMediaTypeException.class})
-    public ResponseEntity<Map<String, Object>> badRequest(HttpServletRequest request,
-                                                          ServletException ex) {
-        return handleError(request, BAD_REQUEST, ex);
+    public ResponseEntity<Map<String, Object>> badRequest(HttpServletRequest request, ServletException ex) {
+        return handleError(request, BAD_REQUEST, ex); // 400
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)
-    public ResponseEntity<Map<String, Object>> restTemplateException(HttpServletRequest request,
-                                                                     HttpStatusCodeException ex) {
+    public ResponseEntity<Map<String, Object>> restTemplateException(HttpServletRequest request, HttpStatusCodeException ex) {
         return handleError(request, ex.getStatusCode(), ex);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> accessDeny(HttpServletRequest request,
                                                           AccessDeniedException ex) {
-        return handleError(request, FORBIDDEN, ex);
+        return handleError(request, FORBIDDEN, ex); // 403 接口要访问的资源未得到授权，比如只授权了对A应用下Namespace的管理权限，但是却尝试管理B应用下的配置。
+
     }
 
-    //处理自定义Exception
+    // 处理自定义Exception
     @ExceptionHandler({AbstractApolloHttpException.class})
     public ResponseEntity<Map<String, Object>> badRequest(HttpServletRequest request, AbstractApolloHttpException ex) {
         return handleError(request, ex);
     }
 
-
-    private ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request,
-                                                            AbstractApolloHttpException ex) {
+    private ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request, AbstractApolloHttpException ex) {
         return handleError(request, ex.getHttpStatus(), ex);
     }
 
 
-    private ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request,
-                                                            HttpStatus status, Throwable ex) {
+    private ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request, HttpStatus status, Throwable ex) {
         String message = ex.getMessage();
 
+        // 打印错误日志
         logger.error(message, ex);
         Tracer.logError(ex);
 
-
         Map<String, Object> errorAttributes = new HashMap<>();
         boolean errorHandled = false;
-
         if (ex instanceof HttpStatusCodeException) {
             try {
-                //try to extract the original error info if it is thrown from apollo programs, e.g. admin service
+                // try to extract the original error info if it is thrown from apollo programs, e.g. admin service
                 errorAttributes = gson.fromJson(((HttpStatusCodeException) ex).getResponseBodyAsString(), mapType);
                 status = ((HttpStatusCodeException) ex).getStatusCode();
                 errorHandled = true;
@@ -97,14 +92,13 @@ public class GlobalDefaultExceptionHandler {
         if (!errorHandled) {
             errorAttributes.put("status", status.value());
             errorAttributes.put("message", message);
-            errorAttributes.put("timestamp",
-                    LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            errorAttributes.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             errorAttributes.put("exception", ex.getClass().getName());
-
         }
 
+        // 返回 ResponseEntity 对象，并返回
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(APPLICATION_JSON);
+        headers.setContentType(APPLICATION_JSON); // 设置为 application/json 返回
         return new ResponseEntity<>(errorAttributes, headers, status);
     }
 

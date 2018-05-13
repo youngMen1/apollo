@@ -2,7 +2,6 @@ package com.ctrip.framework.apollo.common.controller;
 
 import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
-
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,19 +18,20 @@ import java.util.List;
  */
 @Configuration
 public class HttpMessageConverterConfiguration {
-  @Bean
-  public HttpMessageConverters messageConverters() {
-    GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
-    gsonHttpMessageConverter.setGson(
-            new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create());
-    final List<HttpMessageConverter<?>> converters = Lists.newArrayList(
-            new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(),
-            new AllEncompassingFormHttpMessageConverter(), gsonHttpMessageConverter);
-    return new HttpMessageConverters() {
-      @Override
-      public List<HttpMessageConverter<?>> getConverters() {
-        return converters;
-      }
-    };
-  }
+
+    @Bean
+    public HttpMessageConverters messageConverters() {
+        // 创建 GsonHttpMessageConverter 对象，用于对 JSON 数据转换
+        GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
+        gsonHttpMessageConverter.setGson(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create());
+        // 创建 HttpMessageConverter 数组
+        final List<HttpMessageConverter<?>> converters = Lists.newArrayList(new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(), new AllEncompassingFormHttpMessageConverter(), gsonHttpMessageConverter);
+        return new HttpMessageConverters() {
+            @Override
+            public List<HttpMessageConverter<?>> getConverters() {
+                return converters;
+            }
+        };
+    }
+
 }

@@ -7,19 +7,23 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.servlet.DispatcherType;
 
+/**
+ * UTF-8 编码 Filter 配置类
+ */
 @Configuration
 public class CharacterEncodingFilterConfiguration {
 
-  @Bean
-  public FilterRegistrationBean encodingFilter() {
-    FilterRegistrationBean bean = new FilterRegistrationBean();
-    bean.setFilter(new CharacterEncodingFilter());
-    bean.addInitParameter("encoding", "UTF-8");
-    //FIXME: https://github.com/Netflix/eureka/issues/702
+    @Bean
+    public FilterRegistrationBean encodingFilter() {
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter(new CharacterEncodingFilter());
+        bean.addInitParameter("encoding", "UTF-8");
+        //FIXME: https://github.com/Netflix/eureka/issues/702
 //    bean.addInitParameter("forceEncoding", "true");
-    bean.setName("encodingFilter");
-    bean.addUrlPatterns("/*");
-    bean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
-    return bean;
-  }
+        bean.setName("encodingFilter");
+        bean.addUrlPatterns("/*");
+        bean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
+        return bean;
+    }
+
 }
