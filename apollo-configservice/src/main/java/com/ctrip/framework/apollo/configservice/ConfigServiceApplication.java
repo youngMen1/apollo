@@ -3,7 +3,6 @@ package com.ctrip.framework.apollo.configservice;
 import com.ctrip.framework.apollo.biz.ApolloBizConfig;
 import com.ctrip.framework.apollo.common.ApolloCommonConfig;
 import com.ctrip.framework.apollo.metaservice.ApolloMetaServiceConfig;
-
 import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
 import org.springframework.boot.actuate.system.EmbeddedServerPortFileWriter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -22,23 +21,22 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Jason Song(song_s@ctrip.com)
  */
 
-@EnableEurekaServer
+@EnableEurekaServer // 启动 Eureka Server
 @EnableAspectJAutoProxy
 @EnableAutoConfiguration // (exclude = EurekaClientConfigBean.class)
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:configservice.properties"})
 @ComponentScan(basePackageClasses = {ApolloCommonConfig.class,
-    ApolloBizConfig.class,
-    ConfigServiceApplication.class,
-    ApolloMetaServiceConfig.class})
+        ApolloBizConfig.class,
+        ConfigServiceApplication.class,
+        ApolloMetaServiceConfig.class})
 public class ConfigServiceApplication {
 
-  public static void main(String[] args) throws Exception {
-    ConfigurableApplicationContext context =
-        new SpringApplicationBuilder(ConfigServiceApplication.class).run(args);
-    context.addApplicationListener(new ApplicationPidFileWriter());
-    context.addApplicationListener(new EmbeddedServerPortFileWriter());
-  }
+    public static void main(String[] args) throws Exception {
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(ConfigServiceApplication.class).run(args);
+        context.addApplicationListener(new ApplicationPidFileWriter());
+        context.addApplicationListener(new EmbeddedServerPortFileWriter());
+    }
 
 }
