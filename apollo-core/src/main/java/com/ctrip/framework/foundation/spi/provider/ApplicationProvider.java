@@ -3,21 +3,25 @@ package com.ctrip.framework.foundation.spi.provider;
 import java.io.InputStream;
 
 /**
+ * Application Provider
+ *
  * Provider for application related properties
  */
 public interface ApplicationProvider extends Provider {
-  /**
-   * @return the application's app id
-   */
-  public String getAppId();
 
-  /**
-   * @return whether the application's app id is set or not
-   */
-  public boolean isAppIdSet();
+    /**
+     * @return the application's app id
+     */
+    String getAppId();
 
-  /**
-   * Initialize the application provider with the specified input stream
-   */
-  public void initialize(InputStream in);
+    /**
+     * @return whether the application's app id is set or not
+     */
+    boolean isAppIdSet();
+
+    /**
+     * Initialize the application provider with the specified input stream
+     */
+    void initialize(InputStream in);
+
 }

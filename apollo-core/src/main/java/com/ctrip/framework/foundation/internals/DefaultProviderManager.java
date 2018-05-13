@@ -12,9 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DefaultProviderManager implements ProviderManager {
+
     private static final Logger logger = LoggerFactory.getLogger(DefaultProviderManager.class);
-    private Map<Class<? extends Provider>, Provider> m_providers =
-            new LinkedHashMap<Class<? extends Provider>, Provider>();
+    private Map<Class<? extends Provider>, Provider> m_providers = new LinkedHashMap<Class<? extends Provider>, Provider>();
 
     public DefaultProviderManager() {
         // Load per-application configuration, like app id, from classpath://META-INF/app.properties
@@ -46,8 +46,7 @@ public class DefaultProviderManager implements ProviderManager {
         if (provider != null) {
             return (T) provider;
         } else {
-            logger.error("No provider [{}] found in DefaultProviderManager, please make sure it is registered in DefaultProviderManager ",
-                    clazz.getName());
+            logger.error("No provider [{}] found in DefaultProviderManager, please make sure it is registered in DefaultProviderManager ", clazz.getName());
             return (T) NullProviderManager.provider;
         }
     }

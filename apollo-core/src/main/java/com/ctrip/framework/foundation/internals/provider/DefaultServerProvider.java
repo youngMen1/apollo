@@ -15,7 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class DefaultServerProvider implements ServerProvider {
+
     private static final Logger logger = LoggerFactory.getLogger(DefaultServerProvider.class);
+
     private static final String SERVER_PROPERTIES_LINUX = "/opt/settings/server.properties";
     private static final String SERVER_PROPERTIES_WINDOWS = "C:/opt/settings/server.properties";
 
