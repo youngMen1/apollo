@@ -31,7 +31,7 @@ public class ServiceBootstrap {
      * @return 所有对象
      */
     private static <S> Iterator<S> loadAll(Class<S> clazz) {
-        ServiceLoader<S> loader = ServiceLoader.load(clazz);
+        ServiceLoader<S> loader = ServiceLoader.load(clazz); // JDK SPI
         return loader.iterator();
     }
 

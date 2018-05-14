@@ -9,16 +9,23 @@ import com.ctrip.framework.apollo.spi.ConfigRegistry;
 
 /**
  * Entry point for client config use
+ * <p>
+ * 客户端配置服务，作为配置使用的入口
  *
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ConfigService {
+
+    /**
+     * 单例
+     */
     private static final ConfigService s_instance = new ConfigService();
 
     private volatile ConfigManager m_configManager;
     private volatile ConfigRegistry m_configRegistry;
 
     private ConfigManager getManager() {
+        // 若 ConfigManager 未初始化，进行获得
         if (m_configManager == null) {
             synchronized (this) {
                 if (m_configManager == null) {
@@ -26,11 +33,12 @@ public class ConfigService {
                 }
             }
         }
-
+        // 返回 ConfigManager
         return m_configManager;
     }
 
     private ConfigRegistry getRegistry() {
+        // 若 ConfigRegistry 未初始化，进行获得
         if (m_configRegistry == null) {
             synchronized (this) {
                 if (m_configRegistry == null) {
@@ -38,7 +46,7 @@ public class ConfigService {
                 }
             }
         }
-
+        // 返回 ConfigRegistry
         return m_configRegistry;
     }
 
@@ -77,6 +85,7 @@ public class ConfigService {
      */
     static void setConfig(String namespace, final Config config) {
         s_instance.getRegistry().register(namespace, new ConfigFactory() {
+
             @Override
             public Config create(String namespace) {
                 return config;
@@ -84,7 +93,7 @@ public class ConfigService {
 
             @Override
             public ConfigFile createConfigFile(String namespace, ConfigFileFormat configFileFormat) {
-                return null;
+                return null; // 空
             }
 
         });
@@ -111,4 +120,5 @@ public class ConfigService {
             s_instance.m_configRegistry = null;
         }
     }
+
 }
