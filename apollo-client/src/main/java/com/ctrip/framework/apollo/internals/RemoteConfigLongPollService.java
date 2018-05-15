@@ -77,23 +77,23 @@ public class RemoteConfigLongPollService {
     private final AtomicBoolean m_longPollStarted;
     /**
      * 长轮询的 Namespace Multimap 缓存
-     *
+     * <p>
      * 通过 {@link #submit(String, RemoteConfigRepository)} 添加 RemoteConfigRepository 。
-     *
+     * <p>
      * KEY：Namespace 的名字
      * VALUE：RemoteConfigRepository 集合
      */
     private final Multimap<String, RemoteConfigRepository> m_longPollNamespaces;
     /**
      * 通知编号 Map 缓存
-     *
+     * <p>
      * KEY：Namespace 的名字
      * VALUE：最新的通知编号
      */
     private final ConcurrentMap<String, Long> m_notifications;
     /**
      * 通知消息 Map 缓存
-     *
+     * <p>
      * KEY：Namespace 的名字
      * VALUE：ApolloNotificationMessages 对象
      */
@@ -112,7 +112,8 @@ public class RemoteConfigLongPollService {
         m_longPollNamespaces = Multimaps.synchronizedSetMultimap(HashMultimap.<String, RemoteConfigRepository>create());
         m_notifications = Maps.newConcurrentMap();
         m_remoteNotificationMessages = Maps.newConcurrentMap();
-        m_responseType = new TypeToken<List<ApolloConfigNotification>>() {}.getType();
+        m_responseType = new TypeToken<List<ApolloConfigNotification>>() {
+        }.getType();
         gson = new Gson();
         m_configUtil = ApolloInjector.getInstance(ConfigUtil.class);
         m_httpUtil = ApolloInjector.getInstance(HttpUtil.class);
@@ -189,8 +190,8 @@ public class RemoteConfigLongPollService {
     /**
      * 执行长轮询
      *
-     * @param appId App 编号
-     * @param cluster Cluster 名
+     * @param appId      App 编号
+     * @param cluster    Cluster 名
      * @param dataCenter 数据中心的 Cluster 名
      */
     private void doLongPollingRefresh(String appId, String cluster, String dataCenter) {
