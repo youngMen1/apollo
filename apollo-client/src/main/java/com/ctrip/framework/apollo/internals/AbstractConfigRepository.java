@@ -63,7 +63,7 @@ public abstract class AbstractConfigRepository implements ConfigRepository {
     /**
      * 触发监听器们
      *
-     * @param namespace Namespace 名字
+     * @param namespace     Namespace 名字
      * @param newProperties 配置
      */
     protected void fireRepositoryChange(String namespace, Properties newProperties) {

@@ -11,6 +11,8 @@ public interface ConfigRepository {
 
     /**
      * Get the config from this repository.
+     * <p>
+     * 获得配置，以 Properties 对象返回
      *
      * @return config
      */

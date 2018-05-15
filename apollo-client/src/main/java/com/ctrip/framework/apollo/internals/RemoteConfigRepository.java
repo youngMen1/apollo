@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * RemoteConfig Repository
- *
+ * <p>
  * 远程配置 Repository ，实现从 Config Service 拉取配置，并缓存在内存中。并且，定时 + 实时刷新缓存。
  *
  * @author Jason Song(song_s@ctrip.com)
@@ -85,7 +85,7 @@ public class RemoteConfigRepository extends AbstractConfigRepository {
     private RateLimiter m_loadConfigRateLimiter;
     /**
      * 是否强制拉取缓存的标记
-     *
+     * <p>
      * 若为 true ，则多一轮从 Config Service 拉取配置
      * 为 true 的原因，RemoteConfigRepository 知道 Config Service 有配置刷新
      */
@@ -283,7 +283,7 @@ public class RemoteConfigRepository extends AbstractConfigRepository {
                     // config not found
                     if (ex.getStatusCode() == 404) {
                         String message = String.format("Could not find config for namespace - appId: %s, cluster: %s, namespace: %s, " +
-                                        "please check whether the configs are released in Apollo!", appId, cluster, m_namespace);
+                                "please check whether the configs are released in Apollo!", appId, cluster, m_namespace);
                         statusCodeException = new ApolloConfigStatusCodeException(ex.getStatusCode(), message);
                     }
                     // 【TODO 6001】Tracer 日志
@@ -359,7 +359,7 @@ public class RemoteConfigRepository extends AbstractConfigRepository {
      * 当长轮询到配置更新时，发起同步配置的任务
      *
      * @param longPollNotifiedServiceDto ServiceDTO 对象
-     * @param remoteMessages ApolloNotificationMessages 对象
+     * @param remoteMessages             ApolloNotificationMessages 对象
      */
     public void onLongPollNotified(ServiceDTO longPollNotifiedServiceDto, ApolloNotificationMessages remoteMessages) {
         // 设置长轮询到配置更新的 Config Service 。下次同步配置时，优先读取该服务
