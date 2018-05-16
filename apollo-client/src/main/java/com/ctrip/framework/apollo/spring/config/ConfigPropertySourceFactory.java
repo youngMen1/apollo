@@ -1,23 +1,31 @@
 package com.ctrip.framework.apollo.spring.config;
 
-import java.util.List;
-
 import com.ctrip.framework.apollo.Config;
 import com.google.common.collect.Lists;
 
+import java.util.List;
+
+/**
+ * {@link ConfigPropertySource} 工厂
+ */
 public class ConfigPropertySourceFactory {
 
-  private final List<ConfigPropertySource> configPropertySources = Lists.newLinkedList();
+    /**
+     * ConfigPropertySource 数组
+     */
+    private final List<ConfigPropertySource> configPropertySources = Lists.newLinkedList();
 
-  public ConfigPropertySource getConfigPropertySource(String name, Config source) {
-    ConfigPropertySource configPropertySource = new ConfigPropertySource(name, source);
+    // 创建 ConfigPropertySource 对象
+    public ConfigPropertySource getConfigPropertySource(String name, Config source) {
+        // 创建 ConfigPropertySource 对象
+        ConfigPropertySource configPropertySource = new ConfigPropertySource(name, source);
+        // 添加到数组中
+        configPropertySources.add(configPropertySource);
+        return configPropertySource;
+    }
 
-    configPropertySources.add(configPropertySource);
+    public List<ConfigPropertySource> getAllConfigPropertySources() {
+        return Lists.newLinkedList(configPropertySources);
+    }
 
-    return configPropertySource;
-  }
-
-  public List<ConfigPropertySource> getAllConfigPropertySources() {
-    return Lists.newLinkedList(configPropertySources);
-  }
 }
