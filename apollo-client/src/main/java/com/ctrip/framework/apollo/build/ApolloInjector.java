@@ -55,8 +55,7 @@ public class ApolloInjector {
             return getInjector().getInstance(clazz, name);
         } catch (Throwable ex) {
             Tracer.logError(ex);
-            throw new ApolloConfigException(
-                    String.format("Unable to load instance for type %s and name %s !", clazz.getName(), name), ex);
+            throw new ApolloConfigException(String.format("Unable to load instance for type %s and name %s !", clazz.getName(), name), ex);
         }
     }
 

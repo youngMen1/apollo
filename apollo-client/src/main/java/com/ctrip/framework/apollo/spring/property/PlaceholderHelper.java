@@ -27,30 +27,24 @@ public class PlaceholderHelper {
 
     /**
      * Resolve placeholder property values, e.g.
-     * <br />
-     * <br />
+     *
      * "${somePropertyValue}" -> "the actual property value"
      */
     public Object resolvePropertyValue(ConfigurableBeanFactory beanFactory, String beanName, String placeholder) {
         // resolve string value
         String strVal = beanFactory.resolveEmbeddedValue(placeholder);
-
-        BeanDefinition bd = (beanFactory.containsBean(beanName) ? beanFactory
-                .getMergedBeanDefinition(beanName) : null);
-
+        // 获得 BeanDefinition 对象
+        BeanDefinition bd = (beanFactory.containsBean(beanName) ? beanFactory.getMergedBeanDefinition(beanName) : null);
         // resolve expressions like "#{systemProperties.myProp}"
         return evaluateBeanDefinitionString(beanFactory, strVal, bd);
     }
 
-    private Object evaluateBeanDefinitionString(ConfigurableBeanFactory beanFactory, String value,
-                                                BeanDefinition beanDefinition) {
+    private Object evaluateBeanDefinitionString(ConfigurableBeanFactory beanFactory, String value, BeanDefinition beanDefinition) {
         if (beanFactory.getBeanExpressionResolver() == null) {
             return value;
         }
-        Scope scope = (beanDefinition != null ? beanFactory
-                .getRegisteredScope(beanDefinition.getScope()) : null);
-        return beanFactory.getBeanExpressionResolver()
-                .evaluate(value, new BeanExpressionContext(beanFactory, scope));
+        Scope scope = (beanDefinition != null ? beanFactory.getRegisteredScope(beanDefinition.getScope()) : null);
+        return beanFactory.getBeanExpressionResolver().evaluate(value, new BeanExpressionContext(beanFactory, scope));
     }
 
     /**
