@@ -24,6 +24,7 @@ public class NamespaceHandler extends NamespaceHandlerSupport {
     }
 
     static class BeanParser extends AbstractSingleBeanDefinitionParser {
+
         @Override
         protected Class<?> getBeanClass(Element element) {
             return ConfigPropertySourcesProcessor.class;
@@ -58,6 +59,7 @@ public class NamespaceHandler extends NamespaceHandlerSupport {
             // 添加到 PropertySourcesProcessor
             PropertySourcesProcessor.addNamespaces(NAMESPACE_SPLITTER.splitToList(namespaces), order);
         }
+
     }
 
 }
