@@ -1,6 +1,62 @@
 Apollo（配置中心）
 ================
 
+# 个人博客
+
+-------
+
+![](http://www.yunai.me/images/common/wechat_mp.jpeg)
+
+> 🙂🙂🙂关注**微信公众号：【芋艿的后端小屋】**有福利：  
+> 1. RocketMQ / MyCAT / Sharding-JDBC **所有**源码分析文章列表  
+> 2. RocketMQ / MyCAT / Sharding-JDBC **中文注释源码 GitHub 地址**  
+> 3. 您对于源码的疑问每条留言**都**将得到**认真**回复。**甚至不知道如何读源码也可以请教噢**。  
+> 4. **新的**源码解析文章**实时**收到通知。**每周更新一篇左右**。
+
+-------
+
+# 联系方式
+
+* QQ : 7685413
+* 微信 : wangwenbin-server
+* 掘金-Java交流群 : 217878901
+* 知识星球：![知识星球](http://www.iocoder.cn/images/Architecture/2017_12_29/01.png)
+
+* 配置中心 **Apollo**
+
+    * [《Apollo 源码解析 —— 调试环境搭建》](http://www.iocoder.cn/Apollo/build-debugging-environment?github&1611)
+    * [《Apollo 源码解析 —— Portal 创建 App》](http://www.iocoder.cn/Apollo/portal-create-app?github&1611)
+    * [《Apollo 源码解析 —— Portal 创建 Cluster》](http://www.iocoder.cn/Apollo/portal-create-cluster?github&1611)
+    * [《Apollo 源码解析 —— Portal 创建 Namespace》](http://www.iocoder.cn/Apollo/portal-create-namespace?github&1611)
+    * [《Apollo 源码解析 —— Portal 关联 Namespace》](http://www.iocoder.cn/Apollo/portal-associate-namespace?github&1611)
+    * [《Apollo 源码解析 —— Portal 创建 Item》](http://www.iocoder.cn/Apollo/portal-create-item?github&1611)
+    * [《Apollo 源码解析 —— Portal 批量变更 Item》](http://www.iocoder.cn/Apollo/portal-update-item-set?github&1611)
+    * [《Apollo 源码解析 —— Admin Service 锁定 Namespace》](http://www.iocoder.cn/Apollo/admin-service-lock-namespace?github&1611)
+    * [《Apollo 源码解析 —— Portal 发布配置》](http://www.iocoder.cn/Apollo/portal-publish?github&1611)
+    * [《Apollo 源码解析 —— Admin Service 发送 ReleaseMessage》](http://www.iocoder.cn/Apollo/admin-server-send-release-message?github&1611)
+    * [《Apollo 源码解析 —— Config Service 通知配置变化》](http://www.iocoder.cn/Apollo/config-service-notifications?github&1611)
+    * [《Apollo 源码解析 —— Config Service 配置读取接口》](http://www.iocoder.cn/Apollo/config-service-config-query-api?github&1611)
+    * [《Apollo 源码解析 —— Client 轮询配置》](http://www.iocoder.cn/Apollo/client-polling-config?github&1611)
+    * [《Apollo 源码解析 —— Config Service 记录 Instance》](http://www.iocoder.cn/Apollo/config-service-audit-instance?github&1611)
+    * [《Apollo 源码解析 —— Portal 创建灰度》](http://www.iocoder.cn/Apollo/portal-create-namespace-branch?github&1611)
+    * [《Apollo 源码解析 —— Portal 配置灰度规则》](http://www.iocoder.cn/Apollo/portal-modify-namespace-branch-gray-rules?github&1611)
+    * [《Apollo 源码解析 —— Portal 灰度发布》](http://www.iocoder.cn/Apollo/portal-publish-namespace-branch?github&1611)
+    * [《Apollo 源码解析 —— Portal 灰度全量发布》](http://www.iocoder.cn/Apollo/portal-publish-namespace-branch-to-master?github&1611)
+    * [《Apollo 源码解析 —— 服务自身配置 ServerConfig》](http://www.iocoder.cn/Apollo/server-config?github&1611)
+    * [《Apollo 源码解析 —— Config Service 操作审计日志 Audit》](http://www.iocoder.cn/Apollo/config-service-audit?github&1611)
+    * [《Apollo 源码解析 —— Portal 认证与授权（一）之认证》](http://www.iocoder.cn/Apollo/portal-auth-1?github&1611)
+    * [《Apollo 源码解析 —— Portal 认证与授权（二）之授权》](http://www.iocoder.cn/Apollo/portal-auth-2?github&1611)
+    * [《Apollo 源码解析 —— OpenAPI 认证与授权（一）之认证》](http://www.iocoder.cn/Apollo/openapi-auth-1?github&1611)
+    * [《Apollo 源码解析 —— OpenAPI 认证与授权（二）之授权》](http://www.iocoder.cn/Apollo/openapi-auth-2?github&1611)
+    * [《Apollo 源码解析 —— 服务的注册与发现》](http://www.iocoder.cn/Apollo/service-register-discovery?github&1611)
+    * [《Apollo 源码解析 —— 客户端 API 配置（一）之一览》](http://www.iocoder.cn/Apollo/client-config-api-1?github&1611)
+    * [《Apollo 源码解析 —— 客户端 API 配置（二）之 Config》](http://www.iocoder.cn/Apollo/client-config-api-2?github&1611)
+    * [《Apollo 源码解析 —— 客户端 API 配置（三）之 ConfigFile》](http://www.iocoder.cn/Apollo/client-config-api-3?github&1611)
+    * [《Apollo 源码解析 —— 客户端 API 配置（四）之 ConfigRepository》](http://www.iocoder.cn/Apollo/client-config-api-4?github&1611)
+    * [《Apollo 源码解析 —— 客户端配置 Spring 集成（一）之 XML 配置》](http://www.iocoder.cn/Apollo/client-config-spring-1?github&1611)
+    * [《Apollo 源码解析 —— 客户端配置 Spring 集成（二）之注解配置》](http://www.iocoder.cn/Apollo/client-config-spring-2?github&1611)
+    * [《Apollo 源码解析 —— 客户端配置 Spring 集成（三）之外部化配置》](http://www.iocoder.cn/Apollo/client-config-spring-3?github&1611)
+
 [![Build Status](https://travis-ci.org/ctripcorp/apollo.svg?branch=master)](https://travis-ci.org/ctripcorp/apollo)
 [![GitHub release](https://img.shields.io/github/release/ctripcorp/apollo.svg)](https://github.com/ctripcorp/apollo/releases)
 [![Coverage Status](https://coveralls.io/repos/github/ctripcorp/apollo/badge.svg?branch=master)](https://coveralls.io/github/ctripcorp/apollo?branch=master)
