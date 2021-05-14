@@ -77,7 +77,7 @@ public class NotificationControllerV2 implements ReleaseMessageListener {
             };
 
     /**
-     * 大量通知分批执行 ExecutorService
+     * 大量通知分批执行 ExecutorService 避免 惊群效应
      */
     private final ExecutorService largeNotificationBatchExecutorService;
     @Autowired

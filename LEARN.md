@@ -1,3 +1,67 @@
+# Apollo
+## 四个核心模块及其主要功能
+
+### ConfigService
+
+* 提供配置获取接口
+
+* 提供配置推送接口
+
+* 服务于Apollo客户端
+
+### AdminService
+
+* 提供配置管理接口
+
+* 提供配置修改发布接口
+
+* 服务于管理界面Portal
+
+### Client
+
+* 为应用获取配置，支持实时更新
+
+* 通过MetaServer获取ConfigService的服务列表
+
+* 使用客户端软负载SLB方式调用ConfigService
+
+### Portal
+
+* 配置管理界面
+
+* 通过MetaServer获取AdminService的服务列表
+
+* 使用客户端软负载SLB方式调用AdminService
+
+
+## 三个辅助服务发现模块
+
+### Eureka
+
+* 用于服务发现和注册
+
+* Config/AdminService注册实例并定期报心跳
+
+* 和ConfigService住在一起部署
+
+### MetaServer
+
+* Portal通过域名访问MetaServer获取AdminService的地址列表
+
+* Client通过域名访问MetaServer获取ConfigService的地址列表
+
+* 相当于一个Eureka Proxy
+
+* 逻辑角色，和ConfigService住在一起部署
+
+### NginxLB
+
+* 和域名系统配合，协助Portal访问MetaServer获取AdminService地址列表
+
+* 和域名系统配合，协助Client访问MetaServer获取ConfigService地址列表
+
+* 和域名系统配合，协助用户访问Portal进行配置管理
+
 # 源码学习
 
 客户端->服务端->服务端后台管理系统
@@ -36,6 +100,7 @@ Admin Service在配置发布后，需要通知所有的Config Service有配置�
 通过一个消息组件（Message Queue）就能很好的实现Admin Service和Config Service的解耦。
 
 在实现上，考虑到Apollo的实际使用场景，以及为了尽可能减少外部依赖，我们没有采用外部的消息中间件，而是通过数据库实现了一个简单的消息队列。
+![img](./doc/images/release-message-design.png)
 
 ## 参考
 https://github.com/ctripcorp/apollo/wiki
