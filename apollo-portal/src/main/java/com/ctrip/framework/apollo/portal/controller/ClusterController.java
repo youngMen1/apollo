@@ -17,6 +17,7 @@ import java.util.Objects;
 import static com.ctrip.framework.apollo.common.utils.RequestPrecondition.checkModel;
 
 /**
+ * 创建集群
  * Cluster Controller
  */
 @RestController

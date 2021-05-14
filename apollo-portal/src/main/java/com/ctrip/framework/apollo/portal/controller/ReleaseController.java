@@ -21,6 +21,10 @@ import java.util.Objects;
 import static com.ctrip.framework.apollo.common.utils.RequestPrecondition.checkModel;
 
 /**
+ * 提供 Release 的 API 。
+ *
+ * 在【发布】的界面中，点击【 发布 】按钮，调用发布配置的 API 。
+ *
  * Release Controller
  */
 @RestController

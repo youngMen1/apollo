@@ -16,10 +16,12 @@ import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
 import com.ctrip.framework.apollo.tracer.Tracer;
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
+import com.sun.javafx.binding.StringFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
